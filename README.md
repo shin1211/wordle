@@ -1,5 +1,11 @@
 # Wordle clone app
 
-## I'm getting stuck in how to move on to the next guess after submitting the first attempt.
+## getting stuck on how to move on to the next guess(next array) after submitting the first attempt.
 
-## Thinking of using useReducer. whenever user hit the 'enter', move to next type?
+## solution:
+
+## created default template with empty string and used for Board component and update
+
+## created useState for current positions (user attempt row and letter position) (not sure this is the best solution)
+
+##

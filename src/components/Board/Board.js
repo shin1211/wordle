@@ -1,6 +1,6 @@
 import Row from './Row';
 import styles from './Board.module.css'
-const Board = ({ onUserWord }) => {
+const Board = () => {
 
     // need attempt props for moving next guess
     return <div className={styles['board-container']}>
