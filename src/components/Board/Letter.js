@@ -10,13 +10,13 @@ const Letter = ({ letterPos, attempt, }) => {
     // const letter = currentBoard[attempt][letterPos].toLowerCase();
     const letter = currentBoard[attempt][letterPos];
     const answer = givenWord[letterPos].toLowerCase();
-    console.log(currentPos)
+    // console.log(currentPos);
 
 
     let currentStatus = '';
     if (answer === letter.toLowerCase()) currentStatus = styles['correct'];
-    if (answer !== letter.toLowerCase() && givenWord.includes(letter.toLowerCase())) currentStatus = styles['almost'];
-    if (answer !== letter.toLowerCase && !givenWord.includes(letter.toLowerCase())) currentStatus = styles['wrong'];
-    return <div className={`${styles['letter-container']} ${currentPos.attempt > attempt ? currentStatus : ''}`}>{letter}</div>
+    if (answer !== letter.toLowerCase() && letter !== '' && givenWord.includes(letter.toLowerCase())) currentStatus = styles['almost'];
+    if (answer !== letter.toLowerCase() && !givenWord.includes(letter.toLowerCase())) currentStatus = styles['wrong'];
+    return <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus}`}>{letter}</div>
 };
 export default Letter;

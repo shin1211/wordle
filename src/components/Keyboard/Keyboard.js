@@ -46,7 +46,7 @@ const Keyboard = () => {
         }
 
         // if(e.key.toLowerCase())
-    })
+    }, [onEnter, onDelete, onSelectLetter])
     useEffect(() => {
         // console.log('re-render')
         document.addEventListener('keydown', keyHandler);
