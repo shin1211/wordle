@@ -1,0 +1,18 @@
+.letter-container {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border: 1px solid red;
+}
+
+.correct {
+  background-color: green;
+}
+
+.almost {
+  background-color: yellow;
+}
+
+.wrong {
+  background-color: red;
+}

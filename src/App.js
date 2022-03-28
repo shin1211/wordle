@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { board } from './components/Board/defaultBoard';
 import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
@@ -15,11 +15,12 @@ function App() {
   const onEnter = () => {
     const newBoard = [...currentBoard];
     if (currentPos.letterPos !== newBoard[0].length) return;  //need to add errorhandler
+    // console.log(givenWord.length);
+    console.log(currentBoard[currentPos.attempt])
     setCurrentPos(prev => ({
       attempt: prev.attempt++,
       letterPos: 0
     }))
-
   }
 
   //if user hit the delete, remove current letter and letter position update previous position.
@@ -64,7 +65,8 @@ function App() {
         setCurrentPos,
         onEnter,
         onDelete,
-        onSelectLetter
+        onSelectLetter,
+        givenWord
       }}>
 
         <Board />

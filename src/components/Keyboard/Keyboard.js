@@ -15,23 +15,40 @@ const Keyboard = () => {
         onSelectLetter } = useContext(BoardContext);
 
     const keyHandler = useCallback((e) => {
-        console.log(e.key)
+        // console.log(e.key)
         if (e.key === 'Enter') {
             onEnter();
         } else if (e.key === 'Backspace') {
             onDelete();
         } else {
-            let regex = /[a-z]/i.test(e.key);
-            console.log(regex)
-            if (regex) {
-                onSelectLetter(e.key);
-            }
+            // let regex = /[a-z]/i.test(e.key);
+            // console.log(regex)
+            // if (regex) {
+            //     onSelectLetter(e.key);
+            // }
+            firstRow.forEach((key) => {
+                if (e.key.toLowerCase() === key.toLowerCase()) {
+                    onSelectLetter(key)
+                }
+            })
+
+            secondRow.forEach((key) => {
+                if (e.key.toLowerCase() === key.toLowerCase()) {
+                    onSelectLetter(key)
+                }
+            })
+
+            thirdRow.forEach((key) => {
+                if (e.key.toLowerCase() === key.toLowerCase()) {
+                    onSelectLetter(key)
+                }
+            })
         }
 
         // if(e.key.toLowerCase())
     })
     useEffect(() => {
-        console.log('re-render')
+        // console.log('re-render')
         document.addEventListener('keydown', keyHandler);
 
         return () => {
@@ -39,26 +56,26 @@ const Keyboard = () => {
         }
     }, [keyHandler])
 
-    return <div className={styles['keyboard-container']}>
-        <div className='row-1'>
-            {firstRow.map((key, index) => {
-                return <Key key={index} keyValue={key} />
-            })}
-        </div>
-        <div className='row-2'>
-            {secondRow.map((key, index) => {
-                return <Key key={index} keyValue={key} />
-            })}
-        </div>
-        <div className='row-3'>
-            <Key keyValue='ENTER' />
-            {thirdRow.map((key, index) => {
-                return <Key key={index} keyValue={key} />
-            })}
-            <Key keyValue='DELETE' />
-
-        </div>
-    </div>
+    return (
+        <div className={styles['keyboard-container']} onKeyDown={keyHandler}>
+            <div className='row-1'>
+                {firstRow.map((key, index) => {
+                    return <Key key={index} keyValue={key} />
+                })}
+            </div>
+            <div className='row-2'>
+                {secondRow.map((key, index) => {
+                    return <Key key={index} keyValue={key} />
+                })}
+            </div>
+            <div className='row-3'>
+                <Key keyValue='ENTER' />
+                {thirdRow.map((key, index) => {
+                    return <Key key={index} keyValue={key} />
+                })}
+                <Key keyValue='DELETE' />
+            </div>
+        </div>)
 };
 
 export default Keyboard;
