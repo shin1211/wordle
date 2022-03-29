@@ -16,12 +16,15 @@ const Letter = ({ letterPos, attempt, }) => {
     if (answer !== letter.toLowerCase() && letter !== '' && givenWord.includes(letter.toLowerCase())) currentStatus = styles['almost'];
     if (answer !== letter.toLowerCase() && !givenWord.includes(letter.toLowerCase())) currentStatus = styles['wrong'];
 
+    let dkdk = styles[`delay-${letterPos}`]
+
 
 
 
 
     return (
-        <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus}`}>
+        <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${dkdk}`
+        }>
             <span className={letter !== '' ? styles.guess : ''}>
                 {letter}
             </span>
