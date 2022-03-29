@@ -2,14 +2,12 @@ import React, { useContext } from 'react';
 import BoardContext from '../store/board-context';
 const Key = ({ keyValue }) => {
     const {
-        currentPos,
         onEnter,
         onDelete,
         onSelectLetter } = useContext(BoardContext);
 
     const selectKeyHandler = (e) => {
-        console.log(currentPos);
-
+        e.preventDefault();
         if (e.target.textContent === 'ENTER') {
             onEnter();
         } else if (e.target.textContent === 'DELETE') {
@@ -20,7 +18,7 @@ const Key = ({ keyValue }) => {
 
 
     }
-    return <button className='' onClick={selectKeyHandler}>{keyValue}</button>
+    return <button className='' onClick={(e) => selectKeyHandler(e)}>{keyValue}</button>
 };
 
 export default Key;

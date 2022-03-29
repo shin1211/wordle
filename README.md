@@ -13,3 +13,5 @@
 ## Problem:
 
 ## When user uses keyboard for inputs after using keyboard simulator on screen for inputs, letters are added with blank cells in between
+
+## what cause: Key component. if I change the '<button>' inside of the Key component as div, it works fine. need to find out why it happens.(onClick?)

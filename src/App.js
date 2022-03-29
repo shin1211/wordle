@@ -21,15 +21,13 @@ function App() {
       attempt: 0, letterPos: 0
     }))
 
-    console.log(currentPos);
-    // if(currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
+    // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
     setGameEnd(false);
     // need new givenword and clean board
-
   }
 
   const onEnter = () => {
-    console.log(currentPos)
+    // console.log(currentPos)
     const newBoard = [...currentBoard];
     if (currentPos.letterPos !== newBoard[0].length) return;  //need to add errorhandler
 
@@ -38,44 +36,74 @@ function App() {
       setGameEnd(true);
       console.log('game end')
     }
-    setCurrentPos(prev => ({
-      attempt: prev.attempt++,
+
+    let newPos = {};
+    newPos = {
+      attempt: currentPos.attempt + 1,
       letterPos: 0
-    }))
+    }
+    setCurrentPos(newPos);
 
+    setCurrentBoard(newBoard);
 
+    // setCurrentPos(prev => ({
+    //   ...prev,
+    //   attempt: prev.attempt++,
+    //   letterPos: 0
+    // }))
   }
 
   //if user hit the delete, remove current letter and letter position update previous position.
   const onDelete = () => {
     const newBoard = [...currentBoard];
-
     if (currentPos.letterPos === 0) return;
 
     newBoard[currentPos.attempt][currentPos.letterPos - 1] = '';
-    setCurrentPos((prev) => ({
-      ...prev,
-      letterPos: prev.letterPos--
-    }))
+    setCurrentBoard(newBoard);
+
+    let newPos = {};
+    newPos = {
+      attempt: currentPos.attempt,
+      letterPos: currentPos.letterPos - 1
+    }
+    setCurrentPos(newPos);
+
+    // setCurrentPos((prev) => ({
+    //   ...prev,
+    //   letterPos: prev.letterPos--
+    // }))
   }
 
   const onSelectLetter = (text) => {
-    const newBoard = [...currentBoard];
-    // check if the current letter position is reaching the length of the word or current attempt
-    if (currentPos.letterPos > newBoard[0].length - 1 || currentPos.attempt === 5) {
-      // need to add errorhandler
-      console.log('finish')
-      return;
-    } else {
+
+    if (!gameEnd) {
+      const newBoard = [...currentBoard];
+      // check if the current letter position is reaching the length of the word or current attempt
+      if (currentPos.letterPos > newBoard[0].length - 1 || currentPos.attempt === 5) {
+        // need to add errorhandler
+
+        return;
+      }
       newBoard[currentPos.attempt][currentPos.letterPos] = text;
       setCurrentBoard(newBoard);
 
+      let newPos = {};
+      newPos = {
+        letterPos: currentPos.letterPos + 1
+      }
+
       setCurrentPos((prev) => ({
         ...prev,
-        letterPos: prev.letterPos++
-      }))
-      console.log('update letterpos');
+        ...newPos
+      }));
+
+      // setCurrentPos((prev) => ({
+      //   ...prev,
+      //   letterPos: prev.letterPos + 1
+      // }))
     }
+
+
   }
 
   return (
@@ -92,7 +120,6 @@ function App() {
         onSelectLetter,
         givenWord
       }}>
-        <button onClick={newGameHandler}>start new game</button>
 
         {/* {!gameEnd && <>
           <Board />
@@ -101,6 +128,11 @@ function App() {
         } */}
         <Board />
         <Keyboard />
+        {gameEnd &&
+          <div>
+            <h2>game end</h2>
+            <button onClick={newGameHandler}>start new game</button>
+          </div>}
 
       </BoardContext.Provider>
     </div>

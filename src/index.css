@@ -229,8 +229,14 @@ template {
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+html {
+  font-size: 125%;
+}
 
 body,
+ul,
+h1,
+h2,
 p {
   margin: 0;
   padding: 0;
