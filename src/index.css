@@ -231,6 +231,8 @@ template {
 }
 html {
   font-size: 125%;
+  background-color: black;
+  color: white;
 }
 
 body,

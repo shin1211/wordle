@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Header from './components/container/Header';
+import LoadingPage from './components/LoadingPage/LoadingPage';
 import { board } from './components/Board/defaultBoard';
 import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
@@ -7,11 +9,16 @@ import BoardContext from './components/store/board-context';
 
 
 function App() {
-  let givenWord = 'hello';
-  let defaultBoard = board(5, givenWord.split('').length);
+  const [word, setWord] = useState('kjkdodgg');
+  let defaultBoard = board(5, word.split('').length);
   const [currentBoard, setCurrentBoard] = useState(defaultBoard);
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
+  const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log(word);
 
 
 
@@ -27,12 +34,12 @@ function App() {
   }
 
   const onEnter = () => {
-    // console.log(currentPos)
+    console.log(currentPos)
     const newBoard = [...currentBoard];
-    if (currentPos.letterPos !== newBoard[0].length) return;  //need to add errorhandler
+    if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
 
     // when user got the correct answer, escape the game?
-    if (givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 4) {
+    if (word.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 4) {
       setGameEnd(true);
       console.log('game end')
     }
@@ -79,7 +86,7 @@ function App() {
     if (!gameEnd) {
       const newBoard = [...currentBoard];
       // check if the current letter position is reaching the length of the word or current attempt
-      if (currentPos.letterPos > newBoard[0].length - 1 || currentPos.attempt === 5) {
+      if (currentPos.letterPos > word.length - 1 || currentPos.attempt === 5) {
         // need to add errorhandler
 
         return;
@@ -96,7 +103,6 @@ function App() {
         ...prev,
         ...newPos
       }));
-
       // setCurrentPos((prev) => ({
       //   ...prev,
       //   letterPos: prev.letterPos + 1
@@ -109,7 +115,7 @@ function App() {
   return (
 
     <div className="App">
-      <h1>wordle</h1>
+      <Header />
       <BoardContext.Provider value={{
         currentBoard,
         setCurrentBoard,
@@ -118,21 +124,29 @@ function App() {
         onEnter,
         onDelete,
         onSelectLetter,
-        givenWord
+        word,
+        setWord,
+        setIsLoading
       }}>
 
-        {/* {!gameEnd && <>
-          <Board />
-          <Keyboard />
-        </>
-        } */}
-        <Board />
-        <Keyboard />
-        {gameEnd &&
-          <div>
-            <h2>game end</h2>
-            <button onClick={newGameHandler}>start new game</button>
-          </div>}
+        {!gameStart && <LoadingPage onStartGame={setGameStart} />}
+        {gameStart &&
+          <section>
+            {!isLoading && <p>Loading...</p>}
+
+            {isLoading &&
+              <>
+                {gameEnd &&
+                  <div>
+                    <h2>Game End</h2>
+                    <h2>Word : {word}</h2>
+                    <button onClick={newGameHandler}>Start new game</button>
+                  </div>}
+                <Board />
+                <Keyboard />
+
+              </>}
+          </section>}
 
       </BoardContext.Provider>
     </div>

@@ -1,14 +1,16 @@
+import { useContext } from 'react';
+import BoardContext from '../store/board-context';
 import Row from './Row';
 import styles from './Board.module.css'
 const Board = () => {
-
+    const { word } = useContext(BoardContext)
     // need attempt props for moving next guess
     return <div className={styles['board-container']}>
-        <Row attempt={0} />
-        <Row attempt={1} />
-        <Row attempt={2} />
-        <Row attempt={3} />
-        <Row attempt={4} />
+        <Row attempt={0} wordLength={word.length} />
+        <Row attempt={1} wordLength={word.length} />
+        <Row attempt={2} wordLength={word.length} />
+        <Row attempt={3} wordLength={word.length} />
+        <Row attempt={4} wordLength={word.length} />
     </div>
 };
 

@@ -5,25 +5,23 @@ import BoardContext from '../store/board-context';
 
 const Letter = ({ letterPos, attempt, }) => {
     // grab letter from updated board;
-    const { currentBoard, givenWord, currentPos } = useContext(BoardContext);
+    const { currentBoard, word, currentPos } = useContext(BoardContext);
     // const letter = currentBoard[attempt][letterPos].toLowerCase();
     const letter = currentBoard[attempt][letterPos];
-    const answer = givenWord[letterPos].toLowerCase();
+    const answer = word[letterPos].toLowerCase();
     // console.log(currentPos);
 
     let currentStatus = '';
     if (answer === letter.toLowerCase()) currentStatus = styles['correct'];
-    if (answer !== letter.toLowerCase() && letter !== '' && givenWord.includes(letter.toLowerCase())) currentStatus = styles['almost'];
-    if (answer !== letter.toLowerCase() && !givenWord.includes(letter.toLowerCase())) currentStatus = styles['wrong'];
+    if (answer !== letter.toLowerCase() && letter !== '' && word.includes(letter.toLowerCase())) currentStatus = styles['almost'];
+    if (answer !== letter.toLowerCase() && !word.includes(letter.toLowerCase())) currentStatus = styles['wrong'];
 
-    let dkdk = styles[`delay-${letterPos}`]
-
-
-
+    // need to fix this part. It works fine but... could be more simple way?
+    const delayAnimation = styles[`delay-${letterPos}`]
 
 
     return (
-        <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${dkdk}`
+        <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${delayAnimation}`
         }>
             <span className={letter !== '' ? styles.guess : ''}>
                 {letter}

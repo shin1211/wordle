@@ -1,7 +1,7 @@
 import Letter from './Letter';
 import styles from './Row.module.css';
 
-const Row = ({ attempt }) => {
+const Row = ({ attempt, wordLength }) => {
 
     // Check the current remaining space.
     // const remaining = letterLength - onUserWord.length;
@@ -10,11 +10,16 @@ const Row = ({ attempt }) => {
     // console.log(letters);
     return (
         <div className={styles['row-container']}>
-            <Letter attempt={attempt} letterPos={0} />
+
+            {Array(wordLength).fill('').map((_, index) => <Letter key={index} attempt={attempt} letterPos={index} />)}
+            {/* <Letter attempt={attempt} letterPos={0} />
             <Letter attempt={attempt} letterPos={1} />
             <Letter attempt={attempt} letterPos={2} />
             <Letter attempt={attempt} letterPos={3} />
             <Letter attempt={attempt} letterPos={4} />
+            <Letter attempt={attempt} letterPos={5} />
+            <Letter attempt={attempt} letterPos={6} /> */}
+
         </div>
     )
 };

@@ -45,7 +45,7 @@ const Keyboard = () => {
             })
         }
 
-        // if(e.key.toLowerCase())
+        // if(e.key.toLowerCasse())
     })
     useEffect(() => {
         document.addEventListener('keydown', keyHandler);

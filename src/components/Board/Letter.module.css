@@ -5,10 +5,15 @@
   width: 50px;
   height: 50px;
   text-align: center;
-  border: 1px solid red;
+  border: 1px solid hsl(20, 40%, 50%);
   flex-shrink: 0;
   margin: 5px;
   transition: all 0.7s;
+}
+
+.guess {
+  display: block;
+  animation: textAnimation 0.7s ease-in-out;
 }
 
 .delay-0 {
@@ -26,10 +31,14 @@
 .delay-4 {
   transition-delay: 1s;
 }
-
-.guess {
-  display: block;
-  animation: textAnimation 0.7s ease-in-out;
+.delay-5 {
+  transition-delay: 1.2s;
+}
+.delay-6 {
+  transition-delay: 1.4s;
+}
+.delay-7 {
+  transition-delay: 1.6s;
 }
 
 .correct {
