@@ -7,9 +7,8 @@ const Letter = ({ letterPos, attempt, }) => {
     // grab letter from updated board;
     const { currentBoard, word, currentPos } = useContext(BoardContext);
     // const letter = currentBoard[attempt][letterPos].toLowerCase();
-    const letter = currentBoard[attempt][letterPos];
+    const letter = currentBoard[attempt][letterPos] || '';
     const answer = word[letterPos].toLowerCase();
-    // console.log(currentPos);
 
     let currentStatus = '';
     if (answer === letter.toLowerCase()) currentStatus = styles['correct'];

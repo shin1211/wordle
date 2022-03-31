@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 const useFetchWords = () => {
 
     const [error, setError] = useState(null);
@@ -22,9 +22,9 @@ const useFetchWords = () => {
         } catch (error) {
             setError(error.message)
         } finally {
-            setIsLoading(false);
+            // this part making error. Need to figure out.
+            // setIsLoading(false);
         }
-        // this part making error. Need to figure out.
     }, []);
     return {
         error,

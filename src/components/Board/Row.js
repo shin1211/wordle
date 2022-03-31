@@ -19,7 +19,6 @@ const Row = ({ attempt, wordLength }) => {
             <Letter attempt={attempt} letterPos={4} />
             <Letter attempt={attempt} letterPos={5} />
             <Letter attempt={attempt} letterPos={6} /> */}
-
         </div>
     )
 };

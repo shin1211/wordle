@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/container/Header';
 import LoadingPage from './components/LoadingPage/LoadingPage';
 import { board } from './components/Board/defaultBoard';
@@ -10,29 +10,39 @@ import useFetchWords from './hooks/use-fetchWords';
 
 
 function App() {
-  const [word, setWord] = useState('kjkdodgg');
-  let defaultBoard = board(5, word.split('').length);
-  const [currentBoard, setCurrentBoard] = useState(defaultBoard);
+  const [difficulty, setDifficulty] = useState(null);
+
+  const [word, setWord] = useState('');
+  const [currentBoard, setCurrentBoard] = useState([]);
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
   const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
 
-
+  // custom hook for api call.
   const { sendRequest } = useFetchWords();
 
 
+  useEffect(() => {
+    const defaultBoard = board(5, word.split('').length);
+    setCurrentBoard(defaultBoard);
+  }, [word]);
 
-  console.log(word);
-
-
+  const wordHandler = (word) => {
+    console.log(word);
+    setWord(word);
+  }
 
   const newGameHandler = () => {
+    sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=20' }, 5, wordHandler);
+    const defaultBoard = board(5, word.split('').length);
+
     setCurrentBoard(defaultBoard);
     setCurrentPos((prev) => ({
       attempt: 0, letterPos: 0
     }))
 
     // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
+
     setGameEnd(false);
     // need new givenword and clean board
   }
@@ -129,38 +139,28 @@ function App() {
         onSelectLetter,
         word,
         setWord,
+        difficulty,
+        setDifficulty,
+        wordHandler
       }}>
-
-        {!gameStart && <LoadingPage onStartGame={setGameStart} />}
-        {gameStart &&
-          <section>
-            {/* {!isLoading && <p>Loading...</p>}
-
-            {isLoading &&
-              <>
-                {gameEnd &&
-                  <div>
-                    <h2>Game End</h2>
-                    <h2>Word : {word}</h2>
-                    <button onClick={newGameHandler}>Start new game</button>
-                  </div>}
-                <Board />
-                <Keyboard />
-
-              </>
-            } */}
-            <>
-              {gameEnd &&
-                <div>
-                  <h2>Game End</h2>
-                  <h2>Word : {word}</h2>
-                  <button onClick={newGameHandler}>Start new game</button>
-                </div>}
+        <main>
+          {gameEnd &&
+            <div>
+              <h2>Game End</h2>
+              <h2>Word : {word}</h2>
+              <button onClick={newGameHandler}>Start new game</button>
+            </div>}
+          {!gameStart && <LoadingPage
+            onStartGame={setGameStart}
+          />}
+          {gameStart &&
+            <section>
               <Board />
               <Keyboard />
+            </section>
+          }
+        </main>
 
-            </>
-          </section>}
 
       </BoardContext.Provider>
     </div>

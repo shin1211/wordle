@@ -1,24 +1,24 @@
 import { useState, useContext } from 'react';
-import useFetchWords from '../../hooks/use-fetchWords';
 import BoardContext from '../store/board-context';
+import useFetchWords from '../../hooks/use-fetchWords';
+// import useAxiosFetch from '../../hooks/useAxiosFetch';
 
-const LoadingPage = ({ onStartGame }) => {
-    const { setWord, } = useContext(BoardContext);
-    const { error, sendRequest, } = useFetchWords();
-    const [level, setLevel] = useState(null);
 
-    const wordHandler = (word) => {
-        setWord(word);
-    }
+const LoadingPage = ({ onStartGame, startGame }) => {
+    const { setWord, difficulty, setDifficulty, wordHandler } = useContext(BoardContext);
+
+
+    const { sendRequest, error, isLoading } = useFetchWords();
+
 
 
     const startGameHandler = () => {
-        sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=20' }, level, wordHandler);
+        sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=50' }, difficulty, wordHandler);
         onStartGame(true);
     }
 
     const levelHandler = (e) => {
-        setLevel(+e.target.value);
+        setDifficulty(+e.target.value);
     }
     return (
         <section>
