@@ -1,27 +1,31 @@
-import { useState } from 'react';
-const useFetchWords = (difficulty, applyData) => {
+import React, { useState, useCallback } from 'react';
+const useFetchWords = () => {
 
     const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(null)
-    const sendRequest = async () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const sendRequest = useCallback(async (requestConfig, difficulty, applyData) => {
+        setIsLoading(true);
         setError(null);
-        setIsLoading(false);
         try {
-            const response = await fetch('https://random-word-api.herokuapp.com/word?number=50');
+            const response = await fetch(requestConfig.url, {
+                method: requestConfig.method ? requestConfig.method : 'GET',
+                headers: requestConfig.headers ? requestConfig.headers : {},
+                body: requestConfig.body ? JSON.stringify(requestConfig.body) : null
+            });
             if (!response.ok) {
                 throw new Error('Something went wrong!')
             }
             const data = await response.json();
             // level of difficulty
             const filteredWords = data.filter((item) => item.length === difficulty);
-            console.log(filteredWords);
-            // setWord(selectedWord[0]);
             applyData(filteredWords[0])
-            setIsLoading(true);
         } catch (error) {
             setError(error.message)
+        } finally {
+            setIsLoading(false);
         }
-    }
+        // this part making error. Need to figure out.
+    }, []);
     return {
         error,
         isLoading,

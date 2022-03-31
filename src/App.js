@@ -5,6 +5,7 @@ import { board } from './components/Board/defaultBoard';
 import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
 import BoardContext from './components/store/board-context';
+import useFetchWords from './hooks/use-fetchWords';
 
 
 
@@ -16,7 +17,10 @@ function App() {
   const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { sendRequest } = useFetchWords();
+
+
 
   console.log(word);
 
@@ -88,7 +92,6 @@ function App() {
       // check if the current letter position is reaching the length of the word or current attempt
       if (currentPos.letterPos > word.length - 1 || currentPos.attempt === 5) {
         // need to add errorhandler
-
         return;
       }
       newBoard[currentPos.attempt][currentPos.letterPos] = text;
@@ -126,13 +129,12 @@ function App() {
         onSelectLetter,
         word,
         setWord,
-        setIsLoading
       }}>
 
         {!gameStart && <LoadingPage onStartGame={setGameStart} />}
         {gameStart &&
           <section>
-            {!isLoading && <p>Loading...</p>}
+            {/* {!isLoading && <p>Loading...</p>}
 
             {isLoading &&
               <>
@@ -145,7 +147,19 @@ function App() {
                 <Board />
                 <Keyboard />
 
-              </>}
+              </>
+            } */}
+            <>
+              {gameEnd &&
+                <div>
+                  <h2>Game End</h2>
+                  <h2>Word : {word}</h2>
+                  <button onClick={newGameHandler}>Start new game</button>
+                </div>}
+              <Board />
+              <Keyboard />
+
+            </>
           </section>}
 
       </BoardContext.Provider>
