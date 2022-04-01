@@ -19,36 +19,43 @@ function App() {
   const [gameEnd, setGameEnd] = useState(false);
 
   // custom hook for api call.
-  const { sendRequest } = useFetchWords();
+  const { sendRequest, isLoading } = useFetchWords();
 
-
+  // need to update when user select the level of difficulty.
   useEffect(() => {
     const defaultBoard = board(5, word.split('').length);
     setCurrentBoard(defaultBoard);
   }, [word]);
 
   const wordHandler = (word) => {
-    console.log(word);
     setWord(word);
   }
 
-  const newGameHandler = () => {
-    sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=20' }, 5, wordHandler);
-    const defaultBoard = board(5, word.split('').length);
+  const resetGame = () => {
+    setGameStart(false);
+    setCurrentPos((prev) => ({
+      attempt: 0, letterPos: 0
+    }));
+    setWord('');
+    setGameEnd(false);
+  }
 
+  // This function will make a new game with same level of difficulty that user choose before. 
+  // and also reset the current attempts and letter of position. (clean board)
+  const newGameHandler = () => {
+    sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=50' }, difficulty, wordHandler);
+    const defaultBoard = board(5, word.split('').length);
     setCurrentBoard(defaultBoard);
     setCurrentPos((prev) => ({
       attempt: 0, letterPos: 0
     }))
-
     // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
-
     setGameEnd(false);
-    // need new givenword and clean board
+
   }
 
+  // When user hit the enter or click enter key from screen, check the answer with user's guess.
   const onEnter = () => {
-    console.log(currentPos)
     const newBoard = [...currentBoard];
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
 
@@ -57,16 +64,16 @@ function App() {
       setGameEnd(true);
       console.log('game end')
     }
-
+    // If there are more attempts left, reset the letter position as 0 and add attempt.
     let newPos = {};
     newPos = {
       attempt: currentPos.attempt + 1,
       letterPos: 0
     }
     setCurrentPos(newPos);
-
     setCurrentBoard(newBoard);
 
+    // This is another way to update current position. 
     // setCurrentPos(prev => ({
     //   ...prev,
     //   attempt: prev.attempt++,
@@ -89,6 +96,7 @@ function App() {
     }
     setCurrentPos(newPos);
 
+    // This is another way to update current position. 
     // setCurrentPos((prev) => ({
     //   ...prev,
     //   letterPos: prev.letterPos--
@@ -109,13 +117,17 @@ function App() {
 
       let newPos = {};
       newPos = {
+        attempt: currentPos.attempt,
         letterPos: currentPos.letterPos + 1
       }
 
-      setCurrentPos((prev) => ({
-        ...prev,
-        ...newPos
-      }));
+      setCurrentPos(newPos);
+      // setCurrentPos((prev) => ({
+      //   ...prev,
+      //   ...newPos
+      // }));
+
+      // This is another way to update current position. 
       // setCurrentPos((prev) => ({
       //   ...prev,
       //   letterPos: prev.letterPos + 1
@@ -148,19 +160,22 @@ function App() {
             <div>
               <h2>Game End</h2>
               <h2>Word : {word}</h2>
-              <button onClick={newGameHandler}>Start new game</button>
+              <button onClick={newGameHandler}>Try again with new word!</button>
+              <button onClick={resetGame}>Back to main page</button>
             </div>}
           {!gameStart && <LoadingPage
             onStartGame={setGameStart}
           />}
-          {gameStart &&
-            <section>
-              <Board />
-              <Keyboard />
-            </section>
-          }
-        </main>
 
+          {gameStart && isLoading && <p>Loading...</p>}
+          {gameStart &&
+            <>
+              <section>
+                <Board />
+                <Keyboard />
+              </section>
+            </>}
+        </main>
 
       </BoardContext.Provider>
     </div>

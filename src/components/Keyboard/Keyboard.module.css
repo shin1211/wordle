@@ -4,8 +4,11 @@
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
+  /* height: max-content; */
+  padding: 1rem;
+  margin: 1rem auto;
 }
 
-.key-button {
-  padding: 0.5rem;
+.keyboard-row {
+  display: flex;
 }

@@ -17,15 +17,16 @@ const useFetchWords = () => {
             }
             const data = await response.json();
             // level of difficulty
-            const filteredWords = data.filter((item) => item.length === difficulty);
+            const filteredWords = data.filter((item) => item.length === difficulty || item.length === difficulty - 1);
             applyData(filteredWords[0])
         } catch (error) {
             setError(error.message)
         } finally {
             // this part making error. Need to figure out.
-            // setIsLoading(false);
+            setIsLoading(false);
         }
     }, []);
+
     return {
         error,
         isLoading,

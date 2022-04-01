@@ -1,0 +1,9 @@
+.key {
+  border: 1px solid white;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.active {
+  background-color: white;
+}

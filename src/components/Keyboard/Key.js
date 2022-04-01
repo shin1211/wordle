@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import BoardContext from '../store/board-context';
-const Key = ({ keyValue }) => {
+import styles from './Key.module.css'
+const Key = ({ keyValue, pressed }) => {
     const {
         onEnter,
         onDelete,
         onSelectLetter } = useContext(BoardContext);
 
+    const activeStyles = pressed ? styles['active'] : '';
     const selectKeyHandler = (e) => {
-        e.preventDefault();
         if (e.target.textContent === 'ENTER') {
             onEnter();
         } else if (e.target.textContent === 'DELETE') {
@@ -18,7 +19,7 @@ const Key = ({ keyValue }) => {
 
 
     }
-    return <button className='' onClick={(e) => selectKeyHandler(e)}>{keyValue}</button>
+    return <span className={`${styles.key} ${activeStyles}`} onClick={(e) => selectKeyHandler(e)}>{keyValue}</span>
 };
 
 export default Key;
