@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import BoardContext from '../store/board-context';
 import styles from './Key.module.css'
 const Key = ({ keyValue, pressed }) => {
+    const [clickedBtn, setClickedBtn] = useState('');
     const {
         onEnter,
         onDelete,

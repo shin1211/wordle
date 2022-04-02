@@ -43,7 +43,6 @@ const Keyboard = () => {
                     onSelectLetter(key)
                     setPressed(event.key)
 
-
                 }
             })
 
@@ -78,11 +77,11 @@ const Keyboard = () => {
                 })}
             </div>
             <div className={styles['keyboard-row']}>
-                <Key keyValue='ENTER' />
+                <Key keyValue='ENTER' pressed={pressed === 'Enter' ? true : false} />
                 {thirdRow.map((key, index) => {
                     return <Key key={index} keyValue={key} pressed={pressed === key.toLowerCase() ? true : false} />
                 })}
-                <Key keyValue='DELETE' />
+                <Key keyValue='DELETE' pressed={pressed === 'Delete' ? true : false} />
             </div>
         </div>)
 };

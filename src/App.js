@@ -167,10 +167,11 @@ function App() {
             onStartGame={setGameStart}
           />}
 
-          {gameStart && isLoading && <p>Loading...</p>}
+          {/* {gameStart && isLoading && <p>Loading...</p>} */}
           {gameStart &&
             <>
               <section>
+                {isLoading && <p>Loading...</p>}
                 <Board />
                 <Keyboard />
               </section>

@@ -1,6 +1,12 @@
 # Wordle clone app
 
-## Working on: Creating custom http hook.(random words api). It is not working as what I expect.
+## Working on:
+
+### 1. Creating custom http hook.(random words api). It is not working as what I expect.
+
+### 2. Error handling for word api.
+
+### 3. Overall css aniamtion.
 
 ## Problems:
 
@@ -15,6 +21,8 @@
 ### What cause: Key component. if I change the "button" inside of the Key component as "div", it works as expected. need to find out why this is happening.(onClick?)
 
 ### -------------------------------------------------------------------
+
+### 3. Sometimes, the word that g
 
 ### -------------------------------------------------------------------
 
