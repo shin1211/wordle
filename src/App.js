@@ -11,7 +11,6 @@ import useFetchWords from './hooks/use-fetchWords';
 
 function App() {
   const [difficulty, setDifficulty] = useState(null);
-
   const [word, setWord] = useState('');
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
@@ -19,7 +18,7 @@ function App() {
   const [gameEnd, setGameEnd] = useState(false);
 
   // custom hook for api call.
-  const { sendRequest, isLoading } = useFetchWords();
+  const { sendRequest, isLoading, error } = useFetchWords();
 
   // need to update when user select the level of difficulty.
   useEffect(() => {
@@ -27,10 +26,18 @@ function App() {
     setCurrentBoard(defaultBoard);
   }, [word]);
 
-  const wordHandler = (word) => {
-    setWord(word);
+  const gameHandler = (boolean) => {
+    setGameStart(boolean);
   }
 
+  const wordHandler = (word, isLoaded) => {
+    setWord(word);
+    if (!isLoaded) {
+      gameHandler(true)
+    }
+  }
+
+  // Back to the main page where user can choose the level of difficulty.
   const resetGame = () => {
     setGameStart(false);
     setCurrentPos((prev) => ({
@@ -44,6 +51,10 @@ function App() {
   // and also reset the current attempts and letter of position. (clean board)
   const newGameHandler = () => {
     sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=50' }, difficulty, wordHandler);
+    if (error) {
+      console.log(error);
+      return
+    };
     const defaultBoard = board(5, word.split('').length);
     setCurrentBoard(defaultBoard);
     setCurrentPos((prev) => ({
@@ -72,13 +83,6 @@ function App() {
     }
     setCurrentPos(newPos);
     setCurrentBoard(newBoard);
-
-    // This is another way to update current position. 
-    // setCurrentPos(prev => ({
-    //   ...prev,
-    //   attempt: prev.attempt++,
-    //   letterPos: 0
-    // }))
   }
 
   //if user hit the delete, remove current letter and letter position update previous position.
@@ -96,11 +100,6 @@ function App() {
     }
     setCurrentPos(newPos);
 
-    // This is another way to update current position. 
-    // setCurrentPos((prev) => ({
-    //   ...prev,
-    //   letterPos: prev.letterPos--
-    // }))
   }
 
   const onSelectLetter = (text) => {
@@ -122,18 +121,8 @@ function App() {
       }
 
       setCurrentPos(newPos);
-      // setCurrentPos((prev) => ({
-      //   ...prev,
-      //   ...newPos
-      // }));
 
-      // This is another way to update current position. 
-      // setCurrentPos((prev) => ({
-      //   ...prev,
-      //   letterPos: prev.letterPos + 1
-      // }))
     }
-
 
   }
 
@@ -164,14 +153,14 @@ function App() {
               <button onClick={resetGame}>Back to main page</button>
             </div>}
           {!gameStart && <LoadingPage
-            onStartGame={setGameStart}
+            onStartGame={gameHandler}
           />}
 
           {/* {gameStart && isLoading && <p>Loading...</p>} */}
           {gameStart &&
             <>
               <section>
-                {isLoading && <p>Loading...</p>}
+                {/* {isLoading && <p>Loading...</p>} */}
                 <Board />
                 <Keyboard />
               </section>

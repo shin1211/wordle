@@ -5,3 +5,7 @@
   cursor: pointer;
   background-color: yellow;
 }
+
+.active {
+  background-color: blue;
+}

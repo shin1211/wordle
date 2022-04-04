@@ -1,8 +1,12 @@
+
+
 import { useState, useCallback } from 'react';
+
 const useFetchWords = () => {
 
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
+    const [newWord, setNewWord] = useState('');
     const sendRequest = useCallback(async (requestConfig, difficulty, applyData) => {
         setIsLoading(true);
         setError(null);
@@ -17,26 +21,25 @@ const useFetchWords = () => {
             }
             const data = await response.json();
             // level of difficulty
-            const filteredWords = await data.filter((item) => item.length === difficulty);
+            const filteredWords = data.filter((item) => item.length === difficulty);
+
             if (filteredWords.length === 0) {
                 throw new Error('Something happend during api call. Try again.');
             }
-            applyData(filteredWords[0]);
-            // return filteredWords;
+            setNewWord(filteredWords[0])
+            // applyData(filteredWords[0]);
         } catch (err) {
-            console.log(err.message);
             setError(err.message)
-        } finally {
-
-            // this part making error. Need to figure out.
-            setIsLoading(false);
         }
+        setIsLoading(false);
+
     }, []);
 
     return {
         error,
         isLoading,
         sendRequest,
+        newWord
     }
 };
 

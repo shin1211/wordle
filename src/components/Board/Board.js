@@ -5,12 +5,11 @@ import styles from './Board.module.css'
 const Board = () => {
     const { word } = useContext(BoardContext)
     // need attempt props for moving next guess
-    console.log(word);
-    if (word === '') {
-        return <div className={styles['board-container']}>
-            Loading...
-        </div>
-    }
+    // if (word === '') {
+    //     return <div className={styles['board-container']}>
+    //         Loading...
+    //     </div>
+    // }
     return (
         <div className={styles['board-container']}>
             <Row attempt={0} wordLength={word.length} />
