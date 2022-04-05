@@ -22,7 +22,9 @@
 
 ### -------------------------------------------------------------------
 
-### 3. Sometimes, the word that g
+### 3. I need to update state in parent from a child to game start. I am using a prop function in Parent. All works fine except my prop function is getting the previous state and not the current state.
+
+### Solution: Passed all the states that I need to start a new game into my custom useAsync component and update thoese states after dispatched.
 
 ### -------------------------------------------------------------------
 

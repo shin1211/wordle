@@ -6,7 +6,17 @@ import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
 import BoardContext from './components/store/board-context';
 
-import useFetchWords from './hooks/use-fetchWords';
+import useAsync from './hooks/useAsync'
+import axios from 'axios';
+
+async function getWords(difficulty) {
+  const response = await axios.get('https://random-word-api.herokuapp.com/word?number=10');
+  const filteredWords = await response.data.filter((item) => item.length === difficulty);
+  if (filteredWords.length === 0) {
+    throw new Error('no words. try again');
+  }
+  return filteredWords;
+}
 
 
 function App() {
@@ -17,20 +27,19 @@ function App() {
   const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
 
+  const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setGameStart, setWord);
+  const { loading, error } = state;
 
 
-  // custom hook for api call.
-  const { sendRequest, isLoading, error } = useFetchWords();
+
+
+
 
   // need to update when user select the level of difficulty.
   useEffect(() => {
     const defaultBoard = board(5, word.split('').length);
     setCurrentBoard(defaultBoard);
-  }, [word]);
-
-  // const gameHandler = (boolean) => {
-  //   setGameStart(boolean);
-  // }
+  }, [word, gameStart]);
 
   const wordHandler = (word) => {
     setWord(word);
@@ -43,26 +52,22 @@ function App() {
     setCurrentPos((prev) => ({
       attempt: 0, letterPos: 0
     }));
-    setWord('');
+    // setWord('');
     setGameEnd(false);
   }
 
   // This function will make a new game with same level of difficulty that user choose before. 
   // and also reset the current attempts and letter of position. (clean board)
   const newGameHandler = () => {
-    // sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=50' }, difficulty, wordHandler);
-    if (error) {
-      console.log(error);
-      return
-    };
-    const defaultBoard = board(5, word.split('').length);
-    setCurrentBoard(defaultBoard);
-    setCurrentPos((prev) => ({
-      attempt: 0, letterPos: 0
-    }))
-    // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
-    setGameEnd(false);
+    refetch().then(() => {
+      setCurrentPos((prev) => ({
+        attempt: 0, letterPos: 0
+      }))
+      // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
 
+    });
+
+    setGameEnd(false);
   }
 
   // When user hit the enter or click enter key from screen, check the answer with user's guess.
@@ -143,6 +148,7 @@ function App() {
         difficulty,
         setDifficulty,
         wordHandler,
+        loading, error, refetch
 
       }}>
         <main>
@@ -153,14 +159,16 @@ function App() {
               <button onClick={newGameHandler}>Try again with new word!</button>
               <button onClick={resetGame}>Back to main page</button>
             </div>}
-          {!gameStart && <LoadingPage
-            onStartGame={setGameStart}
-          />}
+          {!gameStart && <LoadingPage />}
 
           {gameStart &&
             <>
               <section>
-                {/* {isLoading && <p>Loading...</p>} */}
+                {loading && <p>Loading...</p>}
+                {error && <div>
+                  <p>Error occur during api call. Please try again</p>
+                  <button onClick={refetch}>Try again</button>
+                </div>}
                 <Board />
                 <Keyboard />
               </section>
