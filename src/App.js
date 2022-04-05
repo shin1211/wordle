@@ -5,8 +5,8 @@ import { board } from './components/Board/defaultBoard';
 import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
 import BoardContext from './components/store/board-context';
-import useFetchWords from './hooks/use-fetchWords';
 
+import useFetchWords from './hooks/use-fetchWords';
 
 
 function App() {
@@ -17,6 +17,8 @@ function App() {
   const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
 
+
+
   // custom hook for api call.
   const { sendRequest, isLoading, error } = useFetchWords();
 
@@ -26,15 +28,13 @@ function App() {
     setCurrentBoard(defaultBoard);
   }, [word]);
 
-  const gameHandler = (boolean) => {
-    setGameStart(boolean);
-  }
+  // const gameHandler = (boolean) => {
+  //   setGameStart(boolean);
+  // }
 
-  const wordHandler = (word, isLoaded) => {
+  const wordHandler = (word) => {
     setWord(word);
-    if (!isLoaded) {
-      gameHandler(true)
-    }
+    // gameHandler(true);
   }
 
   // Back to the main page where user can choose the level of difficulty.
@@ -50,7 +50,7 @@ function App() {
   // This function will make a new game with same level of difficulty that user choose before. 
   // and also reset the current attempts and letter of position. (clean board)
   const newGameHandler = () => {
-    sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=50' }, difficulty, wordHandler);
+    // sendRequest({ url: 'https://random-word-api.herokuapp.com/word?number=50' }, difficulty, wordHandler);
     if (error) {
       console.log(error);
       return
@@ -142,7 +142,8 @@ function App() {
         setWord,
         difficulty,
         setDifficulty,
-        wordHandler
+        wordHandler,
+
       }}>
         <main>
           {gameEnd &&
@@ -153,10 +154,9 @@ function App() {
               <button onClick={resetGame}>Back to main page</button>
             </div>}
           {!gameStart && <LoadingPage
-            onStartGame={gameHandler}
+            onStartGame={setGameStart}
           />}
 
-          {/* {gameStart && isLoading && <p>Loading...</p>} */}
           {gameStart &&
             <>
               <section>
