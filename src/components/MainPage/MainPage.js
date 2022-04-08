@@ -2,9 +2,9 @@ import { useContext, useState } from 'react';
 import BoardContext from '../store/board-context';
 import Button from '../UI/Button';
 import ToggleGroup from '../UI/ToggleGroup';
-import styles from './LoadingPage.module.css';
+import styles from './MainPage.module.css';
 
-const LoadingPage = () => {
+const MainPage = () => {
     const [worningMsg, setWorningMsg] = useState(true)
     const { difficulty, setDifficulty, loading, error, refetch } = useContext(BoardContext);
 
@@ -24,7 +24,7 @@ const LoadingPage = () => {
                     <ToggleGroup levelHandler={levelHandler} />
                     {difficulty === null &&
                         <div className={`${styles['warning']} ${worningMsg && styles['active']}`}>
-                            <p>Please selecet the level!</p>
+                            <p>Please select the level!</p>
                         </div>}
                 </div>
                 <Button
@@ -38,4 +38,4 @@ const LoadingPage = () => {
     )
 }
 
-export default LoadingPage;
+export default MainPage;

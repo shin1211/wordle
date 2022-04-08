@@ -1,10 +1,11 @@
 .keyboard-container {
-  border: 1px solid red;
+  /* border: 1px solid white; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
-  margin: 1rem auto;
+  padding: 0.5rem;
+  width: 450px;
+  margin: 0 auto;
 }
 
 .keyboard-row {

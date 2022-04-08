@@ -1,0 +1,35 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 350px;
+  width: 100%;
+  height: 300px;
+  padding: 1rem;
+  margin: 0 auto;
+  border-radius: 10px;
+  margin-top: 5rem;
+  background-color: #202427;
+}
+
+.loading-container h2 {
+  margin-bottom: 0.5rem;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100px;
+}
+
+.warning {
+  text-align: center;
+  opacity: 0;
+  transition: all 1s;
+}
+
+.active {
+  opacity: 1;
+}

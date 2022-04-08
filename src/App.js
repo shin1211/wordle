@@ -1,23 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import Header from './components/container/Header';
-import LoadingPage from './components/LoadingPage/LoadingPage';
+import MainPage from './components/MainPage/MainPage';
 import { board } from './components/Board/defaultBoard';
 import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
 import BoardContext from './components/store/board-context';
-
+import EndModal from './components/UI/EndModal';
 import useAsync from './hooks/useAsync'
 import axios from 'axios';
 
 async function getWords(difficulty) {
-  const response = await axios.get('https://random-word-api.herokuapp.com/word?number=10');
+  const response = await axios.get('https://random-word-api.herokuapp.com/word?number=50');
   const filteredWords = await response.data.filter((item) => item.length === difficulty);
   if (filteredWords.length === 0) {
-    throw new Error('no words. try again');
+    throw new Error('API Issue. Please try again!');
   }
   return filteredWords;
 }
 
+const wordReducer = (state, action) => {
+  switch (action.type) {
+    case 'CORRECT':
+      return {
+        ...state,
+        correctLetters: [...state.correctLetters, action.val],
+      };
+    case 'INCLUDED':
+      return {
+        ...state,
+        closedLetters: [...state.closedLetters, action.val],
+      };
+    case 'WRONG':
+      return {
+        ...state,
+        wrongLetters: [...state.wrongLetters, action.val]
+      };
+
+    case 'RESET':
+      return {
+        correctLetters: [],
+        closedLetters: [],
+        wrongLetters: [],
+      }
+    default:
+      return {
+        correctLetters: [],
+        closedLetters: [],
+        wrongLetters: [],
+      }
+  }
+}
 
 function App() {
   const [difficulty, setDifficulty] = useState(null);
@@ -26,27 +58,25 @@ function App() {
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
   const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
-
+  const [letterStatus, dispatch] = useReducer(wordReducer, {
+    correctLetters: [],
+    closedLetters: [],
+    wrongLetters: [],
+  })
   const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setGameStart, setWord);
   const { loading, error } = state;
 
 
-
-
-
-
   // need to update when user select the level of difficulty.
   useEffect(() => {
-    const defaultBoard = board(5, word.split('').length);
+    const defaultBoard = board(6, word.split('').length);
     setCurrentBoard(defaultBoard);
   }, [word, gameStart]);
 
   const wordHandler = (word) => {
     setWord(word);
-    // gameHandler(true);
   }
-
-  // Back to the main page where user can choose the level of difficulty.
+  // Back to the main page where user can choose the level of difficulty and reset the current attemps and leeter of position.
   const resetGame = () => {
     setGameStart(false);
     setCurrentPos((prev) => ({
@@ -54,6 +84,7 @@ function App() {
     }));
     // setWord('');
     setGameEnd(false);
+    dispatch({ type: 'RESET' });
   }
 
   // This function will make a new game with same level of difficulty that user choose before. 
@@ -64,22 +95,33 @@ function App() {
         attempt: 0, letterPos: 0
       }))
       // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
-
     });
-
+    dispatch({ type: 'RESET' });
     setGameEnd(false);
   }
 
   // When user hit the enter or click enter key from screen, check the answer with user's guess.
-  const onEnter = () => {
+  const onEnter = (keys) => {
     const newBoard = [...currentBoard];
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
 
     // when user got the correct answer, escape the game?
-    if (word.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 4) {
+    if (word.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 5) {
       setGameEnd(true);
       console.log('game end')
     }
+    // Check the words 
+    newBoard[currentPos.attempt].forEach((letter, index) => {
+      if (word[index].toLowerCase() === letter.toLowerCase()) {
+        dispatch({ type: 'CORRECT', val: letter.toLowerCase() })
+      } else if (word.includes(letter.toLowerCase())) {
+        dispatch({ type: 'INCLUDED', val: letter.toLowerCase() })
+      } else {
+        dispatch({ type: 'WRONG', val: letter.toLowerCase() })
+      }
+    });
+
+
     // If there are more attempts left, reset the letter position as 0 and add attempt.
     let newPos = {};
     newPos = {
@@ -112,7 +154,7 @@ function App() {
     if (!gameEnd) {
       const newBoard = [...currentBoard];
       // check if the current letter position is reaching the length of the word or current attempt
-      if (currentPos.letterPos > word.length - 1 || currentPos.attempt === 5) {
+      if (currentPos.letterPos > word.length - 1 || currentPos.attempt === 6) {
         // need to add errorhandler
         return;
       }
@@ -148,28 +190,30 @@ function App() {
         difficulty,
         setDifficulty,
         wordHandler,
-        loading, error, refetch
-
+        loading,
+        error,
+        refetch,
+        letterStatus,
+        dispatch
       }}>
         <main>
-          {gameEnd &&
-            <div>
-              <h2>Game End</h2>
-              <h2>Word : {word}</h2>
-              <button onClick={newGameHandler}>Try again with new word!</button>
-              <button onClick={resetGame}>Back to main page</button>
-            </div>}
-          {!gameStart && <LoadingPage />}
+          {gameEnd && <EndModal
+            answer={word}
+            newGame={newGameHandler}
+            reset={resetGame}
+          />}
+          {!gameStart && <MainPage />}
 
           {gameStart &&
             <>
               <section>
-                {loading && <p>Loading...</p>}
-                {error && <div>
-                  <p>Error occur during api call. Please try again</p>
-                  <button onClick={refetch}>Try again</button>
-                </div>}
-                <Board />
+                <Board>
+                  {loading && <p>Loading...</p>}
+                  {error && <div>
+                    <p>{error}</p>
+                    <button onClick={refetch}>Try again</button>
+                  </div>}
+                </Board>
                 <Keyboard />
               </section>
             </>}

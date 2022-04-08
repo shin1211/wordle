@@ -9,77 +9,83 @@ const Keyboard = () => {
     const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-    const { onEnter, onDelete, onSelectLetter } = useContext(BoardContext);
+    const { onEnter, onDelete, onSelectLetter, letterStatus } = useContext(BoardContext);
 
     const keyHandler = useCallback((event) => {
         if (event.key === 'Enter') {
+            setPressed(event.key);
             onEnter();
-            setPressed(event.key)
         } else if (event.key === 'Backspace') {
+            setPressed('Delete');
             onDelete();
-            setPressed(event.key)
 
         } else {
             firstRow.forEach((key) => {
                 if (event.key.toLowerCase() === key.toLowerCase()) {
-                    onSelectLetter(key)
-                    setPressed(event.key)
-
-
+                    onSelectLetter(key);
+                    setPressed(key.toLowerCase());
                 }
             })
 
             secondRow.forEach((key) => {
                 if (event.key.toLowerCase() === key.toLowerCase()) {
                     onSelectLetter(key)
-                    setPressed(event.key)
-
-
+                    setPressed(key.toLowerCase())
                 }
             })
 
             thirdRow.forEach((key) => {
                 if (event.key.toLowerCase() === key.toLowerCase()) {
                     onSelectLetter(key)
-                    setPressed(event.key)
-
+                    setPressed(key.toLowerCase())
                 }
             })
 
-            // let regex = /[a-z]/i.test(e.key);
-            // console.log(regex)
-            // if (regex) {
-            //     onSelectLetter(e.key);
-            // }
-
         }
-    })
+    }, [onSelectLetter])
     useEffect(() => {
         document.addEventListener('keydown', keyHandler);
-        document.addEventListener('keyup', () => setPressed(''));
         return () => {
             document.removeEventListener('keydown', keyHandler);
-            document.addEventListener('keyup', () => setPressed(''));
-
         }
     }, [keyHandler])
-
     return (
         <div className={styles['keyboard-container']} onKeyDown={keyHandler}>
             <div className={styles['keyboard-row']}>
                 {firstRow.map((key, index) => {
-                    return <Key key={index} keyValue={key} pressed={pressed === key.toLowerCase() ? true : false} />
+                    return <Key
+                        key={index}
+                        keyValue={key}
+                        pressed={pressed === key.toLowerCase() ? true : false}
+                        correct={letterStatus.correctLetters.includes(key.toLowerCase())}
+                        included={letterStatus.closedLetters.includes(key.toLowerCase())}
+                        disable={letterStatus.wrongLetters.includes(key.toLowerCase())}
+                    />
                 })}
             </div>
             <div className={styles['keyboard-row']}>
                 {secondRow.map((key, index) => {
-                    return <Key key={index} keyValue={key} pressed={pressed === key.toLowerCase() ? true : false} />
+                    return <Key
+                        key={index}
+                        keyValue={key}
+                        pressed={pressed === key.toLowerCase() ? true : false}
+                        correct={letterStatus.correctLetters.includes(key.toLowerCase())}
+                        included={letterStatus.closedLetters.includes(key.toLowerCase())}
+                        disable={letterStatus.wrongLetters.includes(key.toLowerCase())}
+                    />
                 })}
             </div>
             <div className={styles['keyboard-row']}>
                 <Key keyValue='ENTER' pressed={pressed === 'Enter' ? true : false} />
                 {thirdRow.map((key, index) => {
-                    return <Key key={index} keyValue={key} pressed={pressed === key.toLowerCase() ? true : false} />
+                    return <Key
+                        key={index}
+                        keyValue={key}
+                        pressed={pressed === key.toLowerCase() ? true : false}
+                        correct={letterStatus.correctLetters.includes(key.toLowerCase())}
+                        included={letterStatus.closedLetters.includes(key.toLowerCase())}
+                        disable={letterStatus.wrongLetters.includes(key.toLowerCase())}
+                    />
                 })}
                 <Key keyValue='DELETE' pressed={pressed === 'Delete' ? true : false} />
             </div>

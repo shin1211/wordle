@@ -6,7 +6,6 @@ import BoardContext from '../store/board-context';
 const Letter = ({ letterPos, attempt, }) => {
     // grab letter from updated board;
     const { currentBoard, word, currentPos } = useContext(BoardContext);
-    // const letter = currentBoard[attempt][letterPos].toLowerCase();
     const letter = currentBoard[attempt][letterPos] || '';
     const answer = word[letterPos].toLowerCase();
 
@@ -16,8 +15,7 @@ const Letter = ({ letterPos, attempt, }) => {
     if (answer !== letter.toLowerCase() && !word.includes(letter.toLowerCase())) currentStatus = styles['wrong'];
 
     // need to fix this part. It works fine but... could be more simple way?
-    const delayAnimation = styles[`delay-${letterPos}`]
-
+    const delayAnimation = styles[`delay-${letterPos}`];
 
     return (
         <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${delayAnimation}`
