@@ -2,15 +2,15 @@
 
 ## Working on:
 
-### 1. Creating custom http hook.(random words api). It is not working as what I expect. ---- Completed
+- Creating custom http hook.(random words api). It is not working as what I expect. ---- Completed
 
-### 2. Error handling for word api.
+- Error handling for word api.
 
-### 3. Overall css aniamtion.
+- Overall css aniamtion.
 
 ## Problems:
 
-### 1.getting stuck on how to move on to the next guess(next array) after submitting the first guess.
+### 1. Getting stuck on how to move on to the next guess(next array) after submitting the first guess.
 
 Solution: Default template with empty string to be used for Board component and update upon user's inputs and created useState for current positions (user attempt row and letter position) (not sure this is the best solution).
 
@@ -22,12 +22,8 @@ What cause: Key component. if I change the "button" inside of the Key component 
 
 Solution: Passed all the states that I need to start a new game into my custom useAsync component and update thoese states after dispatched.
 
-### 4.
-
 ## Need to fix later:
 
-### 1. Keyboard component. Now it works ok but i'm not convinced to use useCallback.
-
-### 2. Animation for Letter component. It works fine but... could it be more simple?
-
-### 3. Default value for board-context.
+- Keyboard component. Now it works ok but i'm not convinced to use useCallback.
+- Animation for Letter component. It works fine but... could it be more simple?
+- Default value for board-context.

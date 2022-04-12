@@ -21,11 +21,20 @@ async function getWords(difficulty) {
 const wordReducer = (state, action) => {
   switch (action.type) {
     case 'CORRECT':
+      let remainingLetters = [...action.answer];
+      const index = remainingLetters.indexOf(action.val);
+      console.log(index);
+      remainingLetters.splice(index, 1);
+      console.log(remainingLetters);
       return {
         ...state,
         correctLetters: [...state.correctLetters, action.val],
+        remainingLetters: remainingLetters
       };
     case 'INCLUDED':
+      // console.log(action.val)
+      // console.log(state.remainingLetters.includes(action.val));
+      console.log(state.remainingLetters);
       return {
         ...state,
         closedLetters: [...state.closedLetters, action.val],
@@ -41,12 +50,14 @@ const wordReducer = (state, action) => {
         correctLetters: [],
         closedLetters: [],
         wrongLetters: [],
+        remainingLetters: [],
       }
     default:
       return {
         correctLetters: [],
         closedLetters: [],
         wrongLetters: [],
+        remainingLetters: [],
       }
   }
 }
@@ -62,6 +73,7 @@ function App() {
     correctLetters: [],
     closedLetters: [],
     wrongLetters: [],
+    remainingLetters: [],
   })
   const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setGameStart, setWord);
   const { loading, error } = state;
@@ -71,6 +83,7 @@ function App() {
   useEffect(() => {
     const defaultBoard = board(6, word.split('').length);
     setCurrentBoard(defaultBoard);
+    console.log(word);
   }, [word, gameStart]);
 
   const wordHandler = (word) => {
@@ -101,23 +114,29 @@ function App() {
   }
 
   // When user hit the enter or click enter key from screen, check the answer with user's guess.
-  const onEnter = (keys) => {
+  const onEnter = () => {
     const newBoard = [...currentBoard];
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
 
     // when user got the correct answer, escape the game?
     if (word.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 5) {
-      setGameEnd(true);
+      // need to be delayed for css transition end.
+      setTimeout(() => {
+        setGameEnd(true);
+      }, 1500)
       console.log('game end')
     }
     // Check the words 
     newBoard[currentPos.attempt].forEach((letter, index) => {
       if (word[index].toLowerCase() === letter.toLowerCase()) {
-        dispatch({ type: 'CORRECT', val: letter.toLowerCase() })
-      } else if (word.includes(letter.toLowerCase())) {
-        dispatch({ type: 'INCLUDED', val: letter.toLowerCase() })
+        dispatch({ type: 'CORRECT', val: letter.toLowerCase(), answer: [...word] });
+        console.log('check correct word')
       } else {
         dispatch({ type: 'WRONG', val: letter.toLowerCase() })
+      }
+
+      if (word.includes(letter.toLowerCase()) && word[index] !== letter.toLowerCase()) {
+        dispatch({ type: 'INCLUDED', val: letter.toLowerCase() })
       }
     });
 
@@ -166,11 +185,8 @@ function App() {
         attempt: currentPos.attempt,
         letterPos: currentPos.letterPos + 1
       }
-
       setCurrentPos(newPos);
-
     }
-
   }
 
   return (
@@ -194,7 +210,7 @@ function App() {
         error,
         refetch,
         letterStatus,
-        dispatch
+        dispatch,
       }}>
         <main>
           {gameEnd && <EndModal

@@ -42,7 +42,7 @@ const Keyboard = () => {
             })
 
         }
-    }, [onSelectLetter])
+    }, [onSelectLetter, firstRow, secondRow, thirdRow, onDelete, onEnter])
     useEffect(() => {
         document.addEventListener('keydown', keyHandler);
         return () => {
