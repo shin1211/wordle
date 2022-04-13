@@ -1,5 +1,5 @@
 import Letter from './Letter';
-import { useContext, useState, useEffect, useMemo } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import BoardContext from '../store/board-context';
 import styles from './Row.module.css';
 
