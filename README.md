@@ -2,7 +2,7 @@
 
 ## Demo :
 
-[Live Page](https://625714ac0803040008d58450--stunning-bublanina-32326f.netlify.app/).
+[![Netlify Status](https://api.netlify.com/api/v1/badges/4c110a5c-409d-40c3-b4e2-c272e6993b8b/deploy-status)](https://app.netlify.com/sites/stunning-bublanina-32326f/deploys)
 
 ## Tech Stack:
 
@@ -19,6 +19,8 @@ HTML, CSS, Javascript, React
 - Need to add another API to check if user's guess is a word or not.
 
 - Overall css, aniamtion, and media query.
+
+<!-- ## Advanced Feature  -->
 
 ## Problems:
 
