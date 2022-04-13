@@ -2,7 +2,7 @@
 
 ## Demo :
 
-[![Netlify Status](https://stunning-bublanina-32326f.netlify.app)
+https://stunning-bublanina-32326f.netlify.app
 
 ## Tech Stack:
 
