@@ -80,7 +80,6 @@ function App() {
   useEffect(() => {
     const defaultBoard = board(6, word.split('').length);
     setCurrentBoard(defaultBoard);
-    console.log(word);
   }, [word, gameStart]);
 
   // Back to the main page where user can choose the level of difficulty and reset the current attemps and leeter of position.
@@ -116,7 +115,7 @@ function App() {
       setTimeout(() => {
         setGameEnd(true);
       }, 1500)
-      console.log('game end')
+      // console.log('game end')
     }
 
     // newBoard[currentPos.attempt].forEach((letter, index) => {

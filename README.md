@@ -1,4 +1,12 @@
-# Wordle clone app
+# Wordle app
+
+## Demo :
+
+[Live Page](https://625714ac0803040008d58450--stunning-bublanina-32326f.netlify.app/).
+
+## Tech Stack:
+
+HTML, CSS, Javascript, React
 
 ## Working on:
 
@@ -10,7 +18,7 @@
 
 - Need to add another API to check if user's guess is a word or not.
 
-- Overall css aniamtion.
+- Overall css, aniamtion, and media query.
 
 ## Problems:
 

@@ -6,13 +6,14 @@ const Board = ({ children }) => {
     const { word } = useContext(BoardContext);
     return (
         <div className={styles['board-container']}>
-            {children}
+
             <Row attempt={0} wordLength={word.length} />
             <Row attempt={1} wordLength={word.length} />
             <Row attempt={2} wordLength={word.length} />
             <Row attempt={3} wordLength={word.length} />
             <Row attempt={4} wordLength={word.length} />
             <Row attempt={5} wordLength={word.length} />
+
         </div>
     )
 };

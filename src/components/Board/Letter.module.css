@@ -51,7 +51,7 @@
 }
 
 .wrong {
-  background-color: red;
+  background-color: darkgray;
 }
 
 @keyframes textAnimation {
