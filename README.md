@@ -2,7 +2,7 @@
 
 ## Demo :
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4c110a5c-409d-40c3-b4e2-c272e6993b8b/deploy-status)](https://app.netlify.com/sites/stunning-bublanina-32326f/deploys)
+[![Netlify Status](https://stunning-bublanina-32326f.netlify.app)
 
 ## Tech Stack:
 
