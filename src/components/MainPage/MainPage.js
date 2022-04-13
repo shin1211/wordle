@@ -10,6 +10,7 @@ const MainPage = () => {
 
     const levelHandler = (level) => {
         setDifficulty(level);
+        setWorningMsg(false)
     }
 
     const startHandler = () => {
@@ -22,8 +23,8 @@ const MainPage = () => {
                 <h2>Level :</h2>
                 <div className={`${styles['input-container']} `}>
                     <ToggleGroup levelHandler={levelHandler} />
-                    {difficulty === null &&
-                        <div className={`${styles['warning']} ${worningMsg && styles['active']}`}>
+                    {difficulty === null && worningMsg &&
+                        <div className={`${styles['warning']} ${styles['active']}`}>
                             <p>Please select the level!</p>
                         </div>}
                 </div>

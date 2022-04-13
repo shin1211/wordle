@@ -9,11 +9,3 @@ export const board = (totalAttempt, length) => {
     }
     return defaultBoard;
 }
-
-// export const board = [
-//     ['', '', '', '', ''],
-//     ['', '', '', '', ''],
-//     ['', '', '', '', ''],
-//     ['', '', '', '', ''],
-//     ['', '', '', '', ''],
-// ]

@@ -3,7 +3,7 @@ import BoardContext from '../store/board-context';
 import Row from './Row';
 import styles from './Board.module.css'
 const Board = ({ children }) => {
-    const { word } = useContext(BoardContext)
+    const { word } = useContext(BoardContext);
     return (
         <div className={styles['board-container']}>
             {children}

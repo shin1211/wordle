@@ -31,10 +31,7 @@ const wordReducer = (state, action) => {
         correctLetters: [...state.correctLetters, action.val],
         remainingLetters: remainingLetters
       };
-    case 'INCLUDED':
-      // console.log(action.val)
-      // console.log(state.remainingLetters.includes(action.val));
-      console.log(state.remainingLetters);
+    case 'INCLUDED': ;
       return {
         ...state,
         closedLetters: [...state.closedLetters, action.val],
@@ -86,18 +83,15 @@ function App() {
     console.log(word);
   }, [word, gameStart]);
 
-  const wordHandler = (word) => {
-    setWord(word);
-  }
   // Back to the main page where user can choose the level of difficulty and reset the current attemps and leeter of position.
   const resetGame = () => {
     setGameStart(false);
     setCurrentPos((prev) => ({
       attempt: 0, letterPos: 0
     }));
-    // setWord('');
     setGameEnd(false);
     dispatch({ type: 'RESET' });
+    setWord('');
   }
 
   // This function will make a new game with same level of difficulty that user choose before. 
@@ -107,7 +101,6 @@ function App() {
       setCurrentPos((prev) => ({
         attempt: 0, letterPos: 0
       }))
-      // if (currentPos.attempt === 5 || givenWord.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase())
     });
     dispatch({ type: 'RESET' });
     setGameEnd(false);
@@ -118,7 +111,6 @@ function App() {
     const newBoard = [...currentBoard];
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
 
-    // when user got the correct answer, escape the game?
     if (word.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 5) {
       // need to be delayed for css transition end.
       setTimeout(() => {
@@ -126,20 +118,17 @@ function App() {
       }, 1500)
       console.log('game end')
     }
-    // Check the words 
-    newBoard[currentPos.attempt].forEach((letter, index) => {
-      if (word[index].toLowerCase() === letter.toLowerCase()) {
-        dispatch({ type: 'CORRECT', val: letter.toLowerCase(), answer: [...word] });
-        console.log('check correct word')
-      } else {
-        dispatch({ type: 'WRONG', val: letter.toLowerCase() })
-      }
 
-      if (word.includes(letter.toLowerCase()) && word[index] !== letter.toLowerCase()) {
-        dispatch({ type: 'INCLUDED', val: letter.toLowerCase() })
-      }
-    });
-
+    // newBoard[currentPos.attempt].forEach((letter, index) => {
+    //   if (word[index].toLowerCase() === letter.toLowerCase()) {
+    //     dispatch({ type: 'CORRECT', val: letter.toLowerCase(), answer: [...word] });
+    //   } else {
+    //     dispatch({ type: 'WRONG', val: letter.toLowerCase() })
+    //   }
+    //   if (word.includes(letter.toLowerCase()) && word[index] !== letter.toLowerCase()) {
+    //     dispatch({ type: 'INCLUDED', val: letter.toLowerCase() })
+    //   }
+    // });
 
     // If there are more attempts left, reset the letter position as 0 and add attempt.
     let newPos = {};
@@ -193,49 +182,50 @@ function App() {
 
     <div className="App">
       <Header />
-      <BoardContext.Provider value={{
-        currentBoard,
-        setCurrentBoard,
-        currentPos,
-        setCurrentPos,
-        onEnter,
-        onDelete,
-        onSelectLetter,
-        word,
-        setWord,
-        difficulty,
-        setDifficulty,
-        wordHandler,
-        loading,
-        error,
-        refetch,
-        letterStatus,
-        dispatch,
-      }}>
-        <main>
-          {gameEnd && <EndModal
-            answer={word}
-            newGame={newGameHandler}
-            reset={resetGame}
-          />}
-          {!gameStart && <MainPage />}
+      <React.StrictMode>
+        <BoardContext.Provider value={{
+          currentBoard,
+          setCurrentBoard,
+          currentPos,
+          setCurrentPos,
+          onEnter,
+          onDelete,
+          onSelectLetter,
+          word,
+          setWord,
+          difficulty,
+          setDifficulty,
+          loading,
+          error,
+          refetch,
+          letterStatus,
+          dispatch,
+        }}>
+          <main>
+            {gameEnd && <EndModal
+              answer={word}
+              newGame={newGameHandler}
+              reset={resetGame}
+            />}
+            {!gameStart && <MainPage />}
 
-          {gameStart &&
-            <>
-              <section>
-                <Board>
-                  {loading && <p>Loading...</p>}
-                  {error && <div>
-                    <p>{error}</p>
-                    <button onClick={refetch}>Try again</button>
-                  </div>}
-                </Board>
-                <Keyboard />
-              </section>
-            </>}
-        </main>
+            {gameStart &&
+              <>
+                <section>
+                  <Board>
+                    {loading && <p>Loading...</p>}
+                    {error && <div>
+                      <p>{error}</p>
+                      <button onClick={refetch}>Try again</button>
+                    </div>}
+                  </Board>
+                  <Keyboard />
+                </section>
+              </>}
+          </main>
 
-      </BoardContext.Provider>
+        </BoardContext.Provider>
+      </React.StrictMode>
     </div>
   );
 }

@@ -1,15 +1,15 @@
-import React, { useEffect, useContext, useCallback, useState } from 'react';
+import React, { useEffect, useContext, useCallback, useState, useMemo } from 'react';
 import Key from './Key';
 import BoardContext from '../store/board-context';
 
 import styles from './Keyboard.module.css';
 
 const Keyboard = () => {
-    const [pressed, setPressed] = useState('');
-    const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
-    const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
-    const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
     const { onEnter, onDelete, onSelectLetter, letterStatus } = useContext(BoardContext);
+    const [pressed, setPressed] = useState('');
+    const firstRow = useMemo(() => ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'], []);
+    const secondRow = useMemo(() => ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'], []);
+    const thirdRow = useMemo(() => ['Z', 'X', 'C', 'V', 'B', 'N', 'M'], []);
 
     const keyHandler = useCallback((event) => {
         if (event.key === 'Enter') {

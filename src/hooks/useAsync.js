@@ -25,7 +25,7 @@ function reducer(state, action) {
     }
 }
 
-function useAsync(callback, deps = [], skip = false, applyFunction, second) {
+function useAsync(callback, deps = [], skip = false, setGameStart, setWord) {
     const [state, dispatch] = useReducer(reducer, {
         loading: false,
         data: null,
@@ -37,8 +37,8 @@ function useAsync(callback, deps = [], skip = false, applyFunction, second) {
         try {
             const data = await callback();
             dispatch({ type: 'SUCCESS', data });
-            await applyFunction(true);
-            await second(data[0]);
+            await setGameStart(true);
+            await setWord(data[0]);
         } catch (e) {
             dispatch({ type: 'ERROR', error: e.message });
         }

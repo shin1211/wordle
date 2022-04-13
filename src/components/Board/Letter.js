@@ -3,40 +3,31 @@ import styles from './Letter.module.css'
 import BoardContext from '../store/board-context';
 
 
-const Letter = ({ letterPos, attempt, letter }) => {
-    const { currentBoard, word, currentPos, letterStatus } = useContext(BoardContext);
-    // const letter = currentBoard[attempt][letterPos] || '';
-    // const answer = word[letterPos].toLowerCase();
+const Letter = ({ letterPos, attempt, letter, matched }) => {
+    const { currentPos } = useContext(BoardContext);
 
-
-    // let currentStatus = '';
-    // if (answer === letter.toLowerCase()) {
-    //     currentStatus = styles['correct']
-    // };
-    // if (answer !== letter.toLowerCase() && letter !== '') {
-    //     currentStatus = styles['almost']
-    // };
-    // if (answer !== letter.toLowerCase() && !word.includes(letter.toLowerCase())) {
-    //     currentStatus = styles['wrong']
-    // };
-
-
-
+    let currentStatus = '';
+    if (matched === 'correct') {
+        currentStatus = styles['correct']
+    };
+    if (matched === 'almost') {
+        currentStatus = styles['almost']
+    };
+    if (matched === 'wrong') {
+        currentStatus = styles['wrong']
+    };
 
     // need to fix this part. It works fine but... could be more simple way?
     const delayAnimation = styles[`delay-${letterPos}`];
 
+
     return (
 
-        <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && ''} ${delayAnimation}`}>
-            <span>
+        <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${delayAnimation}`}>
+            <span className={letter && styles['guess']}>
                 {letter}
             </span>
-        </div>)
-    // <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${delayAnimation}`}>
-    //     <span className={letter !== '' ? styles.guess : ''}>
-    //         {letter}
-    //     </span>
-    // </div>)
+        </div >)
 };
 export default Letter;
+
