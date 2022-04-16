@@ -6,6 +6,7 @@ import BoardContext from '../store/board-context';
 const Letter = ({ letterPos, attempt, letter, matched }) => {
     const { currentPos } = useContext(BoardContext);
 
+
     let currentStatus = '';
     if (matched === 'correct') {
         currentStatus = styles['correct']
@@ -22,7 +23,6 @@ const Letter = ({ letterPos, attempt, letter, matched }) => {
 
 
     return (
-
         <div className={`${styles['letter-container']} ${currentPos.attempt > attempt && currentStatus} ${delayAnimation}`}>
             <span className={letter && styles['guess']}>
                 {letter}
@@ -30,4 +30,6 @@ const Letter = ({ letterPos, attempt, letter, matched }) => {
         </div >)
 };
 export default Letter;
+
+
 

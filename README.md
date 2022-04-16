@@ -10,11 +10,11 @@ HTML, CSS, Javascript, React
 
 ## Working on:
 
-- Creating custom http hook.(random words api). It is not working as what I expect. ---- Completed
+- Creating custom http hook.(random words api). It is not working as what I expect. ---- completed
 
-- Error handling for word api. --- Completed
+- Error handling for word api. --- completed
 
-- Problem 1.
+- Problem 1. --- completed
 
 - Need to add another API to check if user's guess is a word or not.
 
@@ -26,7 +26,7 @@ HTML, CSS, Javascript, React
 
 ### 1. There was no way to identify whether the guess letter appears more than once or not. (dealing with duplicate letters)
 
-Solution: Working on..
+Solution: Given a word, count the number of occurrences of all of its letters and store it in an object(charMap)[Ex: 'hello' = {h:1, e:1 , l:2, o: 1}] . When inspect the user guess, split the logic for checking correct letter guess (isCorrect) in a given word into a separate loop and subtract the number of correct letters from the charMap before checking the isPresent.
 
 ### 2. Getting stuck on how to move on to the next guess(next array) after submitting the first guess.
 

@@ -5,7 +5,7 @@ import BoardContext from '../store/board-context';
 import styles from './Keyboard.module.css';
 
 const Keyboard = () => {
-    const { onEnter, onDelete, onSelectLetter, letterStatus } = useContext(BoardContext);
+    const { onEnter, onDelete, onSelectLetter } = useContext(BoardContext);
     const [pressed, setPressed] = useState('');
     const firstRow = useMemo(() => ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'], []);
     const secondRow = useMemo(() => ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'], []);
@@ -57,9 +57,6 @@ const Keyboard = () => {
                         key={index}
                         keyValue={key}
                         pressed={pressed === key.toLowerCase() ? true : false}
-                        correct={letterStatus.correctLetters.includes(key.toLowerCase())}
-                        included={letterStatus.closedLetters.includes(key.toLowerCase())}
-                        disable={letterStatus.wrongLetters.includes(key.toLowerCase())}
                     />
                 })}
             </div>
@@ -69,9 +66,6 @@ const Keyboard = () => {
                         key={index}
                         keyValue={key}
                         pressed={pressed === key.toLowerCase() ? true : false}
-                        correct={letterStatus.correctLetters.includes(key.toLowerCase())}
-                        included={letterStatus.closedLetters.includes(key.toLowerCase())}
-                        disable={letterStatus.wrongLetters.includes(key.toLowerCase())}
                     />
                 })}
             </div>
@@ -82,9 +76,6 @@ const Keyboard = () => {
                         key={index}
                         keyValue={key}
                         pressed={pressed === key.toLowerCase() ? true : false}
-                        correct={letterStatus.correctLetters.includes(key.toLowerCase())}
-                        included={letterStatus.closedLetters.includes(key.toLowerCase())}
-                        disable={letterStatus.wrongLetters.includes(key.toLowerCase())}
                     />
                 })}
                 <Key keyValue='DELETE' pressed={pressed === 'Delete' ? true : false} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/container/Header';
 import MainPage from './components/MainPage/MainPage';
 import { board } from './components/Board/defaultBoard';
@@ -18,47 +18,6 @@ async function getWords(difficulty) {
   return filteredWords;
 }
 
-const wordReducer = (state, action) => {
-  switch (action.type) {
-    case 'CORRECT':
-      let remainingLetters = [...action.answer];
-      const index = remainingLetters.indexOf(action.val);
-      console.log(index);
-      remainingLetters.splice(index, 1);
-      console.log(remainingLetters);
-      return {
-        ...state,
-        correctLetters: [...state.correctLetters, action.val],
-        remainingLetters: remainingLetters
-      };
-    case 'INCLUDED': ;
-      return {
-        ...state,
-        closedLetters: [...state.closedLetters, action.val],
-      };
-    case 'WRONG':
-      return {
-        ...state,
-        wrongLetters: [...state.wrongLetters, action.val]
-      };
-
-    case 'RESET':
-      return {
-        correctLetters: [],
-        closedLetters: [],
-        wrongLetters: [],
-        remainingLetters: [],
-      }
-    default:
-      return {
-        correctLetters: [],
-        closedLetters: [],
-        wrongLetters: [],
-        remainingLetters: [],
-      }
-  }
-}
-
 function App() {
   const [difficulty, setDifficulty] = useState(null);
   const [word, setWord] = useState('');
@@ -66,15 +25,8 @@ function App() {
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
   const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
-  const [letterStatus, dispatch] = useReducer(wordReducer, {
-    correctLetters: [],
-    closedLetters: [],
-    wrongLetters: [],
-    remainingLetters: [],
-  })
   const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setGameStart, setWord);
   const { loading, error } = state;
-
 
   // need to update when user select the level of difficulty.
   useEffect(() => {
@@ -89,45 +41,30 @@ function App() {
       attempt: 0, letterPos: 0
     }));
     setGameEnd(false);
-    dispatch({ type: 'RESET' });
     setWord('');
   }
 
-  // This function will make a new game with same level of difficulty that user choose before. 
-  // and also reset the current attempts and letter of position. (clean board)
+  // This function will make a new game with same level of difficulty that user choose before and also reset the current attempts and letter of position. (clean board)
   const newGameHandler = () => {
     refetch().then(() => {
       setCurrentPos((prev) => ({
         attempt: 0, letterPos: 0
       }))
     });
-    dispatch({ type: 'RESET' });
     setGameEnd(false);
   }
 
   // When user hit the enter or click enter key from screen, check the answer with user's guess.
   const onEnter = () => {
-    const newBoard = [...currentBoard];
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
-
-    if (word.toLowerCase() === currentBoard[currentPos.attempt].join('').toLowerCase() || currentPos.attempt === 5) {
+    const currentUserGuess = currentBoard[currentPos.attempt].join('').toLowerCase()
+    if (word.toLowerCase() === currentUserGuess || currentPos.attempt === 5) {
       // need to be delayed for css transition end.
       setTimeout(() => {
         setGameEnd(true);
       }, 1500)
       // console.log('game end')
     }
-
-    // newBoard[currentPos.attempt].forEach((letter, index) => {
-    //   if (word[index].toLowerCase() === letter.toLowerCase()) {
-    //     dispatch({ type: 'CORRECT', val: letter.toLowerCase(), answer: [...word] });
-    //   } else {
-    //     dispatch({ type: 'WRONG', val: letter.toLowerCase() })
-    //   }
-    //   if (word.includes(letter.toLowerCase()) && word[index] !== letter.toLowerCase()) {
-    //     dispatch({ type: 'INCLUDED', val: letter.toLowerCase() })
-    //   }
-    // });
 
     // If there are more attempts left, reset the letter position as 0 and add attempt.
     let newPos = {};
@@ -136,7 +73,6 @@ function App() {
       letterPos: 0
     }
     setCurrentPos(newPos);
-    setCurrentBoard(newBoard);
   }
 
   //if user hit the delete, remove current letter and letter position update previous position.
@@ -178,7 +114,6 @@ function App() {
   }
 
   return (
-
     <div className="App">
       <Header />
       <React.StrictMode>
@@ -197,8 +132,6 @@ function App() {
           loading,
           error,
           refetch,
-          letterStatus,
-          dispatch,
         }}>
           <main>
             {gameEnd && <EndModal
