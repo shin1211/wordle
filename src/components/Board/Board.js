@@ -1,9 +1,18 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BoardContext from '../store/board-context';
 import Row from './Row';
 import styles from './Board.module.css'
 const Board = ({ children }) => {
-    const { word } = useContext(BoardContext);
+    const { word, error, loading, refetch } = useContext(BoardContext);
+    let navigate = useNavigate();
+    useEffect(() => {
+        if (!word) {
+            navigate("/");
+        }
+        console.log(error)
+    }, [word, navigate])
+
     return (
         <div className={styles['board-container']}>
             {children}

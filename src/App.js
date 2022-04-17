@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/container/Header';
 import MainPage from './components/MainPage/MainPage';
 import { board } from './components/Board/defaultBoard';
@@ -10,7 +11,7 @@ import useAsync from './hooks/useAsync'
 import axios from 'axios';
 
 async function getWords(difficulty) {
-  const response = await axios.get('https://random-word-api.herokuapp.com/word?number=50');
+  const response = await axios.get('https://random-word-api.herokuapp.com/word?number=5');
   const filteredWords = await response.data.filter((item) => item.length === difficulty);
   if (filteredWords.length === 0) {
     throw new Error('API Issue. Please try again!');
@@ -23,20 +24,19 @@ function App() {
   const [word, setWord] = useState('');
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
-  const [gameStart, setGameStart] = useState(false);
+  // const [gameStart, setGameStart] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
-  const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setGameStart, setWord);
-  const { loading, error } = state;
+  const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setWord);
+  const { loading, error, data } = state;
 
   // need to update when user select the level of difficulty.
   useEffect(() => {
     const defaultBoard = board(6, word.split('').length);
     setCurrentBoard(defaultBoard);
-  }, [word, gameStart]);
+  }, [word, error]);
 
   // Back to the main page where user can choose the level of difficulty and reset the current attemps and leeter of position.
   const resetGame = () => {
-    setGameStart(false);
     setCurrentPos((prev) => ({
       attempt: 0, letterPos: 0
     }));
@@ -117,49 +117,71 @@ function App() {
     <div className="App">
       <Header />
       <React.StrictMode>
-        <BoardContext.Provider value={{
-          currentBoard,
-          setCurrentBoard,
-          currentPos,
-          setCurrentPos,
-          onEnter,
-          onDelete,
-          onSelectLetter,
-          word,
-          setWord,
-          difficulty,
-          setDifficulty,
-          loading,
-          error,
-          refetch,
-        }}>
-          <main>
-            {gameEnd && <EndModal
-              answer={word}
-              newGame={newGameHandler}
-              reset={resetGame}
-            />}
-            {!gameStart && <MainPage />}
+        <Router>
+          <BoardContext.Provider value={{
+            currentBoard,
+            setCurrentBoard,
+            currentPos,
+            setCurrentPos,
+            onEnter,
+            onDelete,
+            onSelectLetter,
+            word,
+            setWord,
+            difficulty,
+            setDifficulty,
+            loading,
+            error,
+            refetch,
+            data
+          }}>
+            <main>
+              {gameEnd && <EndModal
+                answer={word}
+                newGame={newGameHandler}
+                reset={resetGame}
+              />}
+              <Routes>
+                <Route path='/' element={<MainPage />} />
+                <Route path='/board' element={
+                  <>
+                    <Board>
+                      {loading && <p>Loading...</p>}
+                      {error && <div>
+                        <p>{error}</p>
+                        <button onClick={refetch}>Try again</button>
+                      </div>}
+                    </Board>
+                    <Keyboard />
+                  </>
+                } />
+                {/* {!gameStart && <MainPage />} */}
+              </Routes>
+            </main>
 
-            {gameStart &&
-              <>
-                <section>
-                  <Board>
-                    {loading && <p>Loading...</p>}
-                    {error && <div>
-                      <p>{error}</p>
-                      <button onClick={refetch}>Try again</button>
-                    </div>}
-                  </Board>
-                  <Keyboard />
-                </section>
-              </>}
-          </main>
+          </BoardContext.Provider>
+        </Router>
 
-        </BoardContext.Provider>
       </React.StrictMode>
     </div>
   );
 }
 
 export default App;
+
+
+                // {/* {!gameStart && <MainPage />} */}
+
+                // {gameStart &&
+                //   <>
+                //     <section>
+                //       <Board>
+                //         {loading && <p>Loading...</p>}
+                //         {error && <div>
+                //           <p>{error}</p>
+                //           <button onClick={refetch}>Try again</button>
+                //         </div>}
+                //       </Board>
+                //       <Keyboard />
+                //     </section>
+                //   </>}

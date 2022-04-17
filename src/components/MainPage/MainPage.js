@@ -1,4 +1,6 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import BoardContext from '../store/board-context';
 import Button from '../UI/Button';
 import ToggleGroup from '../UI/ToggleGroup';
@@ -6,7 +8,9 @@ import styles from './MainPage.module.css';
 
 const MainPage = () => {
     const [worningMsg, setWorningMsg] = useState(true)
-    const { difficulty, setDifficulty, loading, error, refetch } = useContext(BoardContext);
+    const { difficulty, setDifficulty, loading, error, refetch, data } = useContext(BoardContext);
+
+    let navigate = useNavigate();
 
     const levelHandler = (level) => {
         setDifficulty(level);
@@ -14,7 +18,7 @@ const MainPage = () => {
     }
 
     const startHandler = () => {
-        refetch();
+        refetch(navigate)
     }
 
     return (
@@ -32,6 +36,7 @@ const MainPage = () => {
                     onClick={startHandler}
                     name={loading ? 'Loading...' : 'Start'}
                     btnStyle='normal'
+                    navigate={navigate}
                 />
                 {error && <p>{error}</p>}
             </div>

@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from 'react';
 
+
 function reducer(state, action) {
     switch (action.type) {
         case 'LOADING':
@@ -25,20 +26,21 @@ function reducer(state, action) {
     }
 }
 
-function useAsync(callback, deps = [], skip = false, setGameStart, setWord) {
+function useAsync(callback, deps = [], skip = false, setWord) {
     const [state, dispatch] = useReducer(reducer, {
         loading: false,
         data: null,
         error: false
     });
-
-    const fetchData = async () => {
+    const fetchData = async (navigate = () => { }) => {
         dispatch({ type: 'LOADING' });
         try {
             const data = await callback();
-            dispatch({ type: 'SUCCESS', data });
-            await setGameStart(true);
+            dispatch({ type: 'SUCCESS', data, });
+            // await setGameStart(true);
             await setWord(data[0]);
+            if (typeof navigate === 'function') navigate("/board")
+            // navigate("/board");
         } catch (e) {
             dispatch({ type: 'ERROR', error: e.message });
         }
