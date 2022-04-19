@@ -4,13 +4,12 @@ import BoardContext from '../store/board-context';
 import Row from './Row';
 import styles from './Board.module.css'
 const Board = ({ children }) => {
-    const { word, error, loading, refetch } = useContext(BoardContext);
+    const { word } = useContext(BoardContext);
     let navigate = useNavigate();
     useEffect(() => {
         if (!word) {
             navigate("/");
         }
-        console.log(error)
     }, [word, navigate])
 
     return (

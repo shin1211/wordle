@@ -8,13 +8,14 @@ import styles from './MainPage.module.css';
 
 const MainPage = () => {
     const [worningMsg, setWorningMsg] = useState(true)
-    const { difficulty, setDifficulty, loading, error, refetch, data } = useContext(BoardContext);
+
+    const { difficulty, setDifficulty, loading, error, refetch } = useContext(BoardContext);
 
     let navigate = useNavigate();
 
     const levelHandler = (level) => {
         setDifficulty(level);
-        setWorningMsg(false)
+        setWorningMsg(false);
     }
 
     const startHandler = () => {
@@ -36,7 +37,6 @@ const MainPage = () => {
                     onClick={startHandler}
                     name={loading ? 'Loading...' : 'Start'}
                     btnStyle='normal'
-                    navigate={navigate}
                 />
                 {error && <p>{error}</p>}
             </div>
