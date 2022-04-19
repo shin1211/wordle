@@ -16,7 +16,7 @@ HTML, CSS, Javascript, React
 
 - Problem 1. --- completed
 
-- Need to add another API to check if user's guess is a word or not.
+- Need to add another API to check if user's guess is a word or not. --- completed
 
 - Overall css, aniamtion, and media query.
 

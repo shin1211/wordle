@@ -13,15 +13,22 @@ const Board = ({ children }) => {
     }, [word, navigate])
 
     return (
+        // <div className={styles['board-container']}>
+        //     {children}
+        //     <Row attempt={0} wordLength={word.length} />
+        //     <Row attempt={1} wordLength={word.length} />
+        //     <Row attempt={2} wordLength={word.length} />
+        //     <Row attempt={3} wordLength={word.length} />
+        //     <Row attempt={4} wordLength={word.length} />
+        //     <Row attempt={5} wordLength={word.length} />
+        // </div>
+
         <div className={styles['board-container']}>
-            {children}
-            <Row attempt={0} wordLength={word.length} />
-            <Row attempt={1} wordLength={word.length} />
-            <Row attempt={2} wordLength={word.length} />
-            <Row attempt={3} wordLength={word.length} />
-            <Row attempt={4} wordLength={word.length} />
-            <Row attempt={5} wordLength={word.length} />
+            {Array(6).fill('').map((_, index) => {
+                return <Row key={index} attempt={index} wordLength={word.length} />
+            })}
         </div>
+
     )
 };
 

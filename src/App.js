@@ -7,7 +7,8 @@ import Board from './components/Board/Board';
 import Keyboard from './components/Keyboard/Keyboard';
 import BoardContext from './components/store/board-context';
 import EndModal from './components/UI/EndModal';
-import useAsync from './hooks/useAsync'
+import ErrorModal from './components/UI/ErrorModal';
+import useAsync from './hooks/useAsync';
 import axios from 'axios';
 
 async function getWords(difficulty) {
@@ -19,23 +20,10 @@ async function getWords(difficulty) {
   return filteredWords;
 };
 
-async function checkDef(word) {
-  try {
-    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, { method: 'GET' });
-    const data = await response.json();
-    if (data.title === "No Definitions Found") {
-      throw new Error('no word');
-    }
-
-  } catch (err) {
-    console.log(err)
-  }
-
-}
-
 function App() {
   const [difficulty, setDifficulty] = useState(null);
   const [word, setWord] = useState('');
+  const [isError, setIsError] = useState(false);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
   const [gameEnd, setGameEnd] = useState(false);
@@ -46,11 +34,20 @@ function App() {
   useEffect(() => {
     const defaultBoard = board(6, word.split('').length);
     setCurrentBoard(defaultBoard);
-    console.log('refresh')
+    console.log('refresh');
   }, [word, error]);
 
-
-
+  // checking the user guess
+  const checkWord = async (userGuess) => {
+    let isWord = null
+    try {
+      const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${userGuess}`);
+      if (response.status === 200) isWord = true
+    } catch (error) {
+      if (error.message.includes('404')) isWord = false;
+    }
+    return isWord;
+  }
 
   // Back to the main page where user can choose the level of difficulty and reset the current attemps and leeter of position.
   const resetGame = () => {
@@ -73,26 +70,32 @@ function App() {
   }
 
   // When user hit the enter or click enter key from screen, check the answer with user's guess.
-  const onEnter = () => {
+  const onEnter = async () => {
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
     const currentUserGuess = currentBoard[currentPos.attempt].join('').toLowerCase();
-    console.log(currentUserGuess);
-    checkDef(currentUserGuess);
 
-    if (word.toLowerCase() === currentUserGuess || currentPos.attempt === 5) {
-      // need to be delayed for css transition end.
-      setTimeout(() => {
-        setGameEnd(true);
-      }, 1500)
-      // console.log('game end')
+    // check if user's guess is the word.
+    let isWord = await checkWord(currentUserGuess);
+    if (isWord) {
+      if (word.toLowerCase() === currentUserGuess || currentPos.attempt === 5) {
+        // need to be delayed for css transition end.
+        setTimeout(() => {
+          setGameEnd(true);
+        }, 1500)
+        // console.log('game end')
+      }
+      // If there are more attempts left, reset the letter position as 0 and add attempt.
+      let newPos = {};
+      newPos = {
+        attempt: currentPos.attempt + 1,
+        letterPos: 0
+      }
+      setCurrentPos(newPos);
+    } else {
+      setIsError(true);
+      console.log(currentPos.attempt)
     }
-    // If there are more attempts left, reset the letter position as 0 and add attempt.
-    let newPos = {};
-    newPos = {
-      attempt: currentPos.attempt + 1,
-      letterPos: 0
-    }
-    setCurrentPos(newPos);
+
   }
 
   //if user hit the delete, remove current letter and letter position update previous position.
@@ -155,6 +158,9 @@ function App() {
           data,
         }}>
           <main>
+            {isError && <ErrorModal
+              setIsError={setIsError}
+            />}
             {gameEnd && <EndModal
               answer={word}
               newGame={newGameHandler}
