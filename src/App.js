@@ -37,7 +37,7 @@ function App() {
     console.log('refresh');
   }, [word, error]);
 
-  // checking the user guess
+  // Checking if the user's guess is the actual word.
   const checkWord = async (userGuess) => {
     let isWord = null
     try {

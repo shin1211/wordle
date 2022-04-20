@@ -6,7 +6,11 @@ https://stunning-bublanina-32326f.netlify.app
 
 ## Tech Stack:
 
-HTML, CSS, Javascript, React
+HTML, CSS, Javascript, React,
+
+## api
+
+https://dictionaryapi.dev/ ,
 
 ## Working on:
 

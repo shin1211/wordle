@@ -24,6 +24,7 @@ const Board = ({ children }) => {
         // </div>
 
         <div className={styles['board-container']}>
+            {children}
             {Array(6).fill('').map((_, index) => {
                 return <Row key={index} attempt={index} wordLength={word.length} />
             })}
