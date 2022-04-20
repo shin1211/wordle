@@ -11,7 +11,7 @@ const Key = ({ keyValue, pressed, correct, included, disable }) => {
     const activeStyles = pressed ? styles['active'] : '';
     const keyStyle = keyValue === 'ENTER' || keyValue === 'DELETE' ? (styles['big-key']) : (styles['key']);
 
-    const newStyle = correct ? styles.correct : included ? styles.included : disable ? styles.disable : '';
+    const keyStatus = correct ? styles.correct : included ? styles.included : disable ? styles.disable : '';
 
     const selectKeyHandler = (e) => {
         if (e.target.textContent === 'ENTER') {
@@ -22,7 +22,7 @@ const Key = ({ keyValue, pressed, correct, included, disable }) => {
             onSelectLetter(e.target.textContent);
         }
     }
-    return <span className={`${keyStyle} ${activeStyles} ${newStyle}`} onClick={(e) => selectKeyHandler(e)}>{keyValue}</span>
+    return <span className={`${keyStyle} ${activeStyles} ${keyStatus}`} onClick={(e) => selectKeyHandler(e)}>{keyValue}</span>
 };
 
 export default Key;

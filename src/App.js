@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/container/Header';
 import MainPage from './components/MainPage/MainPage';
@@ -11,6 +11,40 @@ import ErrorModal from './components/UI/ErrorModal';
 import useAsync from './hooks/useAsync';
 import axios from 'axios';
 
+function wordReducer(state, action) {
+  switch (action.type) {
+    case 'CORRECT':
+      return {
+        ...state,
+        correctLetters: [...state.correctLetters, action.val],
+      }
+    case 'INCLUDED':
+      return {
+        ...state,
+        closeLetters: [...state.closeLetters, action.val]
+      }
+    case 'WRONG':
+      return {
+        ...state,
+        wrongLetters: [...state.wrongLetters, action.val]
+      }
+
+    case 'RESET':
+      return {
+        correctLetters: [],
+        closeLetters: [],
+        wrongLetters: []
+      }
+    default:
+      return {
+        correctLetters: [],
+        closeLetters: [],
+        wrongLetters: []
+      }
+  }
+
+}
+
 async function getWords(difficulty) {
   const response = await axios.get('https://random-word-api.herokuapp.com/word?number=50');
   const filteredWords = await response.data.filter((item) => item.length === difficulty);
@@ -21,6 +55,11 @@ async function getWords(difficulty) {
 };
 
 function App() {
+  const [letterStatus, setLetterStatus] = useReducer(wordReducer, {
+    correctLetters: [],
+    closeLetters: [],
+    wrongLetters: []
+  })
   const [difficulty, setDifficulty] = useState(null);
   const [word, setWord] = useState('');
   const [isError, setIsError] = useState(false);
@@ -56,6 +95,7 @@ function App() {
     setGameEnd(false);
     setWord('');
     setDifficulty(null);
+    setLetterStatus({ type: 'RESET' });
   }
 
   // This function will make a new game with same level of difficulty that user choose before and also reset the current attempts and letter of position. (clean board)
@@ -66,6 +106,7 @@ function App() {
       }))
     });
     setGameEnd(false);
+    setLetterStatus({ type: 'RESET' });
   }
 
   // When user hit the enter or click enter key from screen, check the answer with user's guess.
@@ -90,10 +131,22 @@ function App() {
         letterPos: 0
       }
       setCurrentPos(newPos);
+
+      // Displaying user guess on the keyboard component that either user's guess is the correct letter or not. 
+      currentUserGuess.split('').forEach((letter, index) => {
+        if (word[index].toLowerCase() === letter.toLowerCase()) {
+          setLetterStatus({ type: 'CORRECT', val: letter.toLowerCase() })
+        } else {
+          setLetterStatus({ type: 'WRONG', val: letter.toLowerCase() })
+        }
+        if (word.includes(letter.toLowerCase()) && word[index].toLowerCase() !== letter.toLowerCase()) {
+          setLetterStatus({ type: 'INCLUDED', val: letter.toLowerCase() })
+        }
+
+      })
     } else {
       setIsError(true);
     }
-
   }
 
   //If user hit the delete, remove current letter and letter position update previous position.
@@ -114,7 +167,6 @@ function App() {
   }
 
   const onSelectLetter = (text) => {
-
     if (!gameEnd) {
       const newBoard = [...currentBoard];
       // check if the current letter position is reaching the length of the word or current attempt
@@ -154,6 +206,7 @@ function App() {
           error,
           refetch,
           data,
+          letterStatus,
         }}>
           <main>
             {isError && <ErrorModal

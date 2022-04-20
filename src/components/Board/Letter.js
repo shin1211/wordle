@@ -9,13 +9,13 @@ const Letter = ({ letterPos, attempt, letter, matched }) => {
 
     let currentStatus = '';
     if (matched === 'correct') {
-        currentStatus = styles['correct']
+        currentStatus = styles['correct'];
     };
     if (matched === 'almost') {
-        currentStatus = styles['almost']
+        currentStatus = styles['almost'];
     };
     if (matched === 'wrong') {
-        currentStatus = styles['wrong']
+        currentStatus = styles['wrong'];
     };
 
     // need to fix this part. It works fine but... could be more simple way?

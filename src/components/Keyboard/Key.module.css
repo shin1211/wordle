@@ -2,12 +2,16 @@
   border: 1px solid white;
   padding: 0.3rem;
   cursor: pointer;
-  width: 40px;
+  width: 30px;
   height: 40px;
-  text-align: center;
   opacity: 0.5;
   transition: all 0.5s;
-  border-radius: 50px;
+  border-radius: 5px;
+  margin: 0.2rem;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .big-key {
@@ -16,11 +20,14 @@
   cursor: pointer;
   width: 70px;
   height: 40px;
-  text-align: center;
   opacity: 0.5;
   transition: all 0.5s;
   padding: 0.3rem 0;
   margin: 0.2rem;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .correct {
@@ -32,8 +39,8 @@
 }
 
 .disable {
-  background-color: red;
-  color: black;
+  background-color: hsl(180, 10%, 40%);
+  color: white;
 }
 
 .active {
