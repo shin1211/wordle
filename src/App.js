@@ -30,11 +30,10 @@ function App() {
   const [state, refetch] = useAsync(() => getWords(difficulty), [difficulty], true, setWord);
   const { loading, error, data } = state;
 
-  // need to update when user select the level of difficulty.
+  // Need to update when user select the level of difficulty.
   useEffect(() => {
     const defaultBoard = board(6, word.split('').length);
     setCurrentBoard(defaultBoard);
-    console.log('refresh');
   }, [word, error]);
 
   // Checking if the user's guess is the actual word.
@@ -74,7 +73,7 @@ function App() {
     if (currentPos.letterPos !== word.length) return;  //need to add errorhandler
     const currentUserGuess = currentBoard[currentPos.attempt].join('').toLowerCase();
 
-    // check if user's guess is the word.
+    // check if user's guess is the actual word.
     let isWord = await checkWord(currentUserGuess);
     if (isWord) {
       if (word.toLowerCase() === currentUserGuess || currentPos.attempt === 5) {
@@ -93,12 +92,11 @@ function App() {
       setCurrentPos(newPos);
     } else {
       setIsError(true);
-      console.log(currentPos.attempt)
     }
 
   }
 
-  //if user hit the delete, remove current letter and letter position update previous position.
+  //If user hit the delete, remove current letter and letter position update previous position.
   const onDelete = () => {
     const newBoard = [...currentBoard];
     if (currentPos.letterPos === 0) return;

@@ -11,7 +11,6 @@ const Key = ({ keyValue, pressed, correct, included, disable }) => {
     const activeStyles = pressed ? styles['active'] : '';
     const keyStyle = keyValue === 'ENTER' || keyValue === 'DELETE' ? (styles['big-key']) : (styles['key']);
 
-    // need to rename here
     const newStyle = correct ? styles.correct : included ? styles.included : disable ? styles.disable : '';
 
     const selectKeyHandler = (e) => {
@@ -22,8 +21,6 @@ const Key = ({ keyValue, pressed, correct, included, disable }) => {
         } else {
             onSelectLetter(e.target.textContent);
         }
-
-
     }
     return <span className={`${keyStyle} ${activeStyles} ${newStyle}`} onClick={(e) => selectKeyHandler(e)}>{keyValue}</span>
 };

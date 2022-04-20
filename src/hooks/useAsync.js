@@ -27,7 +27,7 @@ function reducer(state, action) {
 }
 // The default value of the skip parameter is set to false, and if this value is true, useEffect is set to not do anything.
 
-function useAsync(callback, deps = [], skip = false, setWord = () => { }) {
+function useAsync(callback, deps = [], skip = false, setWord) {
     const [state, dispatch] = useReducer(reducer, {
         loading: false,
         data: null,
@@ -39,8 +39,8 @@ function useAsync(callback, deps = [], skip = false, setWord = () => { }) {
         try {
             const data = await callback();
             dispatch({ type: 'SUCCESS', data, });
-            // await setWord(data[0]);
-            if (typeof setWord === 'function') await setWord(data[0])
+            await setWord(data[0]);
+            // if (typeof setWord === 'function') await setWord(data[0])
             if (typeof navigate === 'function') navigate("/board");
         } catch (e) {
             dispatch({ type: 'ERROR', error: e.message });
