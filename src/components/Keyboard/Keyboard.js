@@ -76,7 +76,8 @@ const Keyboard = () => {
                 })}
             </div>
             <div className={styles['keyboard-row']}>
-                <Key keyValue='ENTER' pressed={pressed === 'Enter' ? true : false} />
+                <Key keyValue='DELETE' pressed={pressed === 'Delete' ? true : false} />
+
                 {thirdRow.map((key, index) => {
                     return <Key
                         key={index}
@@ -87,7 +88,8 @@ const Keyboard = () => {
                         disable={letterStatus.wrongLetters.includes(key.toLocaleLowerCase())}
                     />
                 })}
-                <Key keyValue='DELETE' pressed={pressed === 'Delete' ? true : false} />
+                <Key keyValue='ENTER' pressed={pressed === 'Enter' ? true : false} />
+
             </div>
         </div>)
 };

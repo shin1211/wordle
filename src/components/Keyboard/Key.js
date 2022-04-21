@@ -9,6 +9,7 @@ const Key = ({ keyValue, pressed, correct, included, disable }) => {
         onSelectLetter,
     } = useContext(BoardContext);
     const activeStyles = pressed ? styles['active'] : '';
+
     const keyStyle = keyValue === 'ENTER' || keyValue === 'DELETE' ? (styles['big-key']) : (styles['key']);
 
     const keyStatus = correct ? styles.correct : included ? styles.included : disable ? styles.disable : '';
@@ -22,7 +23,9 @@ const Key = ({ keyValue, pressed, correct, included, disable }) => {
             onSelectLetter(e.target.textContent);
         }
     }
-    return <span className={`${keyStyle} ${activeStyles} ${keyStatus}`} onClick={(e) => selectKeyHandler(e)}>{keyValue}</span>
+    return <span className={`${keyStyle} ${activeStyles} ${keyStatus}`} onClick={(e) => {
+        selectKeyHandler(e)
+    }}>{keyValue}</span>
 };
 
 export default Key;
