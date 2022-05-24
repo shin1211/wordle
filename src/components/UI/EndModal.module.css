@@ -33,6 +33,7 @@
 
 .answer {
   color: #219653;
+  text-transform: capitalize;
 }
 
 .btn-container {

@@ -44,15 +44,29 @@ function wordReducer(state, action) {
   }
 
 }
-
+// Grab random words by using Random Word API.
 async function getWords(difficulty) {
   const response = await axios.get('https://random-word-api.herokuapp.com/word?number=50');
   const filteredWords = await response.data.filter((item) => item.length === difficulty);
-  if (filteredWords.length === 0) {
+  // Checking whether the filtered words are actual words through the Dictionary API.
+  const vailedWords = await checkVailedWord(filteredWords);
+
+  if (vailedWords.length === 0) {
     throw new Error('API Issue. Please try again!');
   }
-  return filteredWords;
+  return vailedWords;
+
 };
+// Check if the filtered words are valid words by Dictionary API.
+async function checkVailedWord(words) {
+  let response = [];
+  for (let i = 0; i < words.length; i++) {
+    const data = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${words[i]}`, { validateStatus: false });
+    if (data.status === 200) response.push(words[i]);
+  };
+
+  return response;
+}
 
 function App() {
   const [letterStatus, setLetterStatus] = useReducer(wordReducer, {
@@ -62,6 +76,7 @@ function App() {
   })
   const [difficulty, setDifficulty] = useState(null);
   const [word, setWord] = useState('');
+  // const [definition, setDefinition] = useState('');
   const [isError, setIsError] = useState(false);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentPos, setCurrentPos] = useState({ attempt: 0, letterPos: 0 });
